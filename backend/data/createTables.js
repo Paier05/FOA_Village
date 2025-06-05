@@ -171,13 +171,13 @@ export const landTableTriggerFunction = async() => {
     BEGIN
         UPDATE wheel
         SET 
-            wheel.wood = NEW.wood,
-            wheel.bricks = NEW.bricks,
-            wheel.livestock = NEW.livestock,
-            wheel.wheat = NEW.wheat,
-            wheel.ore = NEW.ore,
-            wheel.textiles = NEW.textiles
-        WHERE wheel.id = NEW.id;
+            wood = NEW.wood,
+            bricks = NEW.bricks,
+            livestock = NEW.livestock,
+            wheat = NEW.wheat,
+            ore = NEW.ore,
+            textiles = NEW.textiles
+        WHERE id = NEW.id;
         RETURN NEW;
     END;
     $$ LANGUAGE plpgsql;
