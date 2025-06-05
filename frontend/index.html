@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sword in Stone -> OG Viewing Test</title>
+</head>
+<body>
+  <h1>Add a New OG</h1>
+    <form id="ogForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="number" id="score" placeholder="Score" required />
+      <button type="submit">Add OG</button>
+    </form>
+    <p id="addResult"></p>
+
+  <hr />
+
+  <h1>Get OG Info</h1>
+    <input type="text" id="ogId" placeholder="Enter OG ID" />
+    <button onclick="fetchOG()">Fetch OG</button>
+    <p id="fetchResult"></p>
+
+  <hr />
+  
+  <h1>View All OGs</h1>
+  <button onclick="fetchAllOGs()">Fetch All OGs</button>
+  <ul id="allOgsList"></ul>
+
+  <hr />
+
+  <h1>Update OG</h1>
+  <form id="updateOgForm">
+    <input type="number" id="updateId" placeholder="OG ID" required />
+    <input type="text" id="updateName" placeholder="New Name" required />
+    <input type="number" id="updateScore" placeholder="New Score" required />
+    <button type="submit">Update OG</button>
+  </form>
+  <p id="updateResult"></p>
+
+  <hr />
+
+  <h1>Delete OG</h1>
+  <form id="deleteOgForm">
+    <input type="number" id="deleteId" placeholder="OG ID to Delete" required />
+    <button type="submit">Delete OG</button>
+  </form>
+  <p id="deleteResult"></p>
+
+  <script src="testscript.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+Step to Set Up:
+1. Make sure Node.js is installed on your device
+    i. Go to your browser and search Node js and download the windows version
+    ii. Install it (it would also install Chocolatey and some additional packages which would take a few minutes)
+
+2. Go to VS Code
+    i. Open Terminal
+    ii. Change directory to backend using "cd backend"
+    iii. type "node -v" to check if node is installed correctly
+    iv. type "npm -v"
+        a. If there is error you can try Ctrl + Shift + P and type "Terminal: Select Default Profile" and change it to Command Prompt
+        b. By default it should be PowerShell of Windows, but since it might be restricted there just change it to Cmd and it works fine
+
+3. After it is all set, we can try to establish connection to database.
+    i. We need to install some packages that we need to run Node js on the server.
+    ii. Change directory to backend (if not already in backend)
+    iii. type "npm init -y" to make sure it is working
+    iv. type "npm install express pg cors dotenv" to install the packages that we need
+        a. express: Web server
+        b. pg     : PostgreSQL driver
+        c. cors   : Allow frontend/backend communication
+        d. dotenv : Manage DataBase credentials securely
+
+4. Create an index.js file in backend 
+    i. Note that in the .env file the APP_PORT and DB_PORT are not the same, one is for the app another is for the database
+    ii. To run this file, change directory to backend, then type "node index.js"
+
+5. Create a index.html file in frontend to test the database connection
+
+6. Create an environment file in backend (.env)
+    i. This file should include the necessary credentials to establish connection to the database
+    ii. Do note that you shouldn't have any spaces around = or anywhere else
+
+7. Remember to go to package.json file and add the line "type": "module" under "version"
+
+8. The file system:
+    i. config
+        a. Basically just stores the pool connection to database
+    ii. data
+        a. Stores the sql queries and used to instantiate tables before starting server
+    iii. middlewares
+        a. Used for handling general errors and print it out
+    iv. models
+        a. Used to store the services for tables (add new row, update new row, ...)
+        b. Basically the main function which will be used by controllers.
+    v. controllers
+        a. Used to run the services in models and log the responses in the console
+    vi. routes
+        a. You can sort of think of this as handling the function call to different DB tables
+        b. It handles the http requests like post, get, delete...
+        c. In the ogRoute.js we used "/ogs" which can be any other alphabets, I chose ogs for Orientation Groups
+        d. In the index.js, we also added "/api" so that it won't have conflict with other links in case "/ogs" is somehow used again
+
+9. Postgre SQL Notes
+    i. Triggers can only work by executing trigger functions
+    ii. Include "LANGUAGE plpgsql" at the end so Postgre knows how to execute the trigger function.
+    iii. SERIAL automatically generates an INT, so when it is used as a foreign key, the foreign key should be INT instead of SERIAL so it takes the same INT from the primary key.
+    iv. Remember to use "await" for queries so that they complete the query before executing the next function.
