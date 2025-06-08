@@ -4,18 +4,14 @@ import authorizeRoles from "../middlewares/roleMiddleware.js";
 import { 
     getOG,
     getAllOG,
-    updateOG
+    updateOGScore,
+    updateOGArmy,
+    updateOGFDCX,
+    updateOGFDCXPlus,
+    updateOGMLMF,
+    updateOGSMMF,
+    updateOGSMMFPlus
 } from "../controllers/ogController.js";
-
-/*
-const router = new express.Router();
-
-router.get("/ogs", getAllOG);
-router.get("/ogs/:id", getOG);
-router.put("/ogs/:id", updateOG);
-
-export default router;
-*/
 
 const router = new express.Router();
 
@@ -32,9 +28,45 @@ router.get(
     getOG);
 
 router.put(
-    "/ogs/:id",
+    "/ogs/:id/score",
     verifyToken,
     authorizeRoles("admin"),
-    updateOG);
+    updateOGScore);
+
+router.put(
+    "/ogs/:id/army",
+    verifyToken,
+    authorizeRoles("admin"),
+    updateOGArmy);
+
+router.put(
+    "/ogs/:id/fdcx",
+    verifyToken,
+    authorizeRoles("admin"),
+    updateOGFDCX);
+
+router.put(
+    "/ogs/:id/fdcx_plus",
+    verifyToken,
+    authorizeRoles("admin"),
+    updateOGFDCXPlus);
+
+router.put(
+    "/ogs/:id/mlmf",
+    verifyToken,
+    authorizeRoles("admin"),
+    updateOGMLMF);
+
+router.put(
+    "/ogs/:id/smmf",
+    verifyToken,
+    authorizeRoles("admin"),
+    updateOGSMMF);
+
+router.put(
+    "/ogs/:id/smmf_plus",
+    verifyToken,
+    authorizeRoles("admin"),
+    updateOGSMMFPlus);
 
 export default router;
