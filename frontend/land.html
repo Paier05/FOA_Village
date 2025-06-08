@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sword in Stone -> OG Land Viewing Test</title>
+</head>
+<body>
+  <h1>Get OG Land Info</h1>
+    <input type="text" id="ogId" placeholder="Enter OG ID" />
+    <button onclick="fetchOGLand()">Fetch OG Land</button>
+    <p id="fetchLandResult"></p>
+
+  <hr />
+  
+  <h1>View All OG Land</h1>
+  <button onclick="fetchAllOGLand()">Fetch All OG Land</button>
+  <ul id="allOgLandList"></ul>
+
+  <hr />
+
+  <h1>Update OG Land</h1>
+  <form id="updateOgLandForm">
+    <input type="number" id="updateId" placeholder="OG ID" required />
+    <input type="number" id="updateWood" placeholder="New Wood" required />
+    <input type="number" id="updateBricks" placeholder="New Bricks" required />
+    <input type="number" id="updateLivestock" placeholder="New Livestock" required />
+    <input type="number" id="updateWheat" placeholder="New Wheat" required />
+    <input type="number" id="updateOre" placeholder="New Ore" required />
+    <input type="number" id="updateTextiles" placeholder="New Textiles" required />
+    <button type="submit">Update OG Land</button>
+  </form>
+  <p id="updateLandResult"></p>
+
+  <script src="testlandscript.js"></script>
+</body>
+</html>
