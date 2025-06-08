@@ -2,22 +2,29 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
+import authRoute from "./routes/authRoute.js";
 import ogRoute from "./routes/ogRoute.js";
-import resourcesRoute from "./routes/resourcesRoute.js"
+import resourcesRoute from "./routes/resourcesRoute.js";
+import landRoute from "./routes/landRoute.js";
+import freelandRoute from "./routes/freelandRoute.js";
+import wheelRoute from "./routes/wheelRoute.js";
 
 import errorHandling from "./middlewares/errorHandler.js";
 
 import {
+  createUsersTable,
   createOGTable,
   createResourcesTable,
   createLandTable,
   createFreelandTable,
+  initializeFreelandTable,
   createWheelTable,
-  dropOGTableTrigger,
+  dropUsersTableTrigger,
   dropLandTableTrigger,
-  ogTableTriggerFunction,
-  ogTableTrigger, 
+  usersTableTriggerFunction,
+  usersTableTrigger, 
   landTableTriggerFunction,
   landTableTrigger
 } from "./data/createTables.js"
@@ -31,19 +38,28 @@ dotenv.config();
 const app = express();
 const port = process.env.APP_PORT;
 
-// These two lines are necessary to use __dirname with ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Serve static files from "public" directory
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true
+  })
+);
 app.use(express.json());
 
 // Routes
+app.use("/api/auth", authRoute);
 app.use("/api", ogRoute);
 app.use("/api", resourcesRoute);
+app.use("/api", landRoute);
+app.use("/api", freelandRoute);
+app.use("/api", wheelRoute);
 
 // Error Handling Middlewares
 app.use(errorHandling);
@@ -53,15 +69,17 @@ async function initializeDatabase()
 {
   try 
   {
+    await createUsersTable();
     await createOGTable();
     await createResourcesTable();
     await createLandTable();
     await createFreelandTable();
+    await initializeFreelandTable();
     await createWheelTable();
-    await dropOGTableTrigger();
+    await dropUsersTableTrigger();
     await dropLandTableTrigger();
-    await ogTableTriggerFunction();
-    await ogTableTrigger();
+    await usersTableTriggerFunction();
+    await usersTableTrigger();
     await landTableTriggerFunction();
     await landTableTrigger();
   } catch (error)
@@ -71,9 +89,9 @@ async function initializeDatabase()
 };
 
 // Testing POSTGRESQL Connection
-app.get("/", async(req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
+//app.get("/", async(req, res) => {
+//  res.sendFile(path.join(frontendPath, "login.html"));
+//});
 
 // Run Server After initializing Database
 initializeDatabase().then(() => {
