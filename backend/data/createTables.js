@@ -1,11 +1,29 @@
 import pool from "../config/db.js";
 
+export const createUsersTable = async() => {
+    const queryText = `
+    CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    role TEXT CHECK (role IN ('admin', 'og')) NOT NULL,
+    valid INT CHECK (valid IN (0, 1)) DEFAULT 0);
+    `;
+    try 
+    {
+        await pool.query(queryText);
+    } catch (error)
+    {
+        console.log("Error creating users table: ", error);
+    };
+};
+
 export const createOGTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS og (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    score INT NOT NULL);
+    id INT PRIMARY KEY,
+    score INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE);
     `;
     try 
     {
@@ -26,7 +44,7 @@ export const createResourcesTable = async() => {
     wheat INT DEFAULT 0,
     ore INT DEFAULT 0,
     textiles INT DEFAULT 0,
-    FOREIGN KEY (id) REFERENCES og(id) ON DELETE CASCADE);
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE);
     `;
     try
     {
@@ -47,7 +65,7 @@ export const createLandTable = async() => {
     wheat INT DEFAULT 0,
     ore INT DEFAULT 0,
     textiles INT DEFAULT 0,
-    FOREIGN KEY (id) REFERENCES og(id) ON DELETE CASCADE);
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE);
     `;
     try
     {
@@ -77,6 +95,24 @@ export const createFreelandTable = async() => {
     };
 };
 
+export const initializeFreelandTable = async() => {
+    const queryText = `
+    DO $$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM freeland) THEN
+        INSERT INTO freeland DEFAULT VALUES;
+        END IF;
+    END $$;
+    `;
+    try
+    {
+        await pool.query(queryText);
+    } catch (error)
+    {
+        console.log("Error initializing freeland table: ", error);
+    };
+};
+
 export const createWheelTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS wheel (
@@ -88,7 +124,7 @@ export const createWheelTable = async() => {
     wheat INT DEFAULT 0,
     ore INT DEFAULT 0,
     textiles INT DEFAULT 0,
-    FOREIGN KEY (id) REFERENCES og(id) ON DELETE CASCADE);
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE);
     `;
     try
     {
@@ -100,16 +136,16 @@ export const createWheelTable = async() => {
 };
 
 
-export const dropOGTableTrigger = async() => {
+export const dropUsersTableTrigger = async() => {
     const queryText = `
-    DROP TRIGGER IF EXISTS after_insert_og ON og;
+    DROP TRIGGER IF EXISTS after_register ON users;
     `
     try 
     {
         await pool.query(queryText);
     } catch (error)
     {
-        console.log("Error dropping resources trigger: ", error);
+        console.log("Error dropping users trigger: ", error);
     };
 };
 
@@ -127,14 +163,17 @@ export const dropLandTableTrigger = async() => {
 };
 
 
-export const ogTableTriggerFunction = async() => {
+export const usersTableTriggerFunction = async() => {
     const queryText = `
-    CREATE OR REPLACE FUNCTION insert_resources_row()
+    CREATE OR REPLACE FUNCTION after_registration()
     RETURNS TRIGGER AS $$
     BEGIN
-        INSERT INTO resources(id) VALUES (NEW.id);
-        INSERT INTO land(id) VALUES (NEW.id);
-        INSERT INTO wheel(id) VALUES (NEW.id);
+        IF NEW.role = 'og' AND NEW.valid = 1 THEN
+            INSERT INTO og(id) VALUES (NEW.id);
+            INSERT INTO resources(id) VALUES (NEW.id);
+            INSERT INTO land(id) VALUES (NEW.id);
+            INSERT INTO wheel(id) VALUES (NEW.id);
+        END IF;
         RETURN NEW;
     END;
     $$ LANGUAGE plpgsql;
@@ -144,23 +183,23 @@ export const ogTableTriggerFunction = async() => {
         await pool.query(queryText);
     } catch (error)
     {
-        console.log("Error creating og table trigger function: ", error);
+        console.log("Error creating users table trigger function: ", error);
     };
 };
 
-export const ogTableTrigger = async() => {
+export const usersTableTrigger = async() => {
     const queryText = `
-    CREATE TRIGGER after_insert_og
-    AFTER INSERT ON og
+    CREATE TRIGGER after_register
+    AFTER UPDATE ON users
     FOR EACH ROW 
-    EXECUTE FUNCTION insert_resources_row();
+    EXECUTE FUNCTION after_registration();
     `
     try 
     {
         await pool.query(queryText);
     } catch (error)
     {
-        console.log("Error creating og table trigger: ", error);
+        console.log("Error creating users table trigger: ", error);
     };
 };
 

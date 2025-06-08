@@ -6,3 +6,11 @@ CREATE TABLE IF NOT EXISTS freeland (
     ore INT DEFAULT 5,
     textiles INT DEFAULT 5
 );
+
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM freeland) THEN
+    INSERT INTO freeland DEFAULT VALUES;
+    END IF;
+END $$;
