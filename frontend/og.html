@@ -19,11 +19,22 @@
 
   <hr />
 
-  <h1>Update OG</h1>
+  <h1>Update OG Field</h1>
   <form id="updateOgForm">
     <input type="number" id="updateId" placeholder="OG ID" required />
-    <input type="number" id="updateScore" placeholder="New Score" required />
-    <button type="submit">Update OG</button>
+    <label for="updateField">Select Field to Update:</label>
+    <select id="updateField" required>
+      <option value="">Select Field</option>
+      <option value="score">Score</option>
+      <option value="army">Army</option>
+      <option value="fdcx">FDCX</option>
+      <option value="fdcx_plus">FDCX+</option>
+      <option value="mlmf">MLMF</option>
+      <option value="smmf">SMMF</option>
+      <option value="smmf_plus">SMMF+</option>
+    </select>
+    <input type="number" id="updateValue" placeholder="New Value" required />
+    <button type="submit">Update</button>
   </form>
   <p id="updateResult"></p>
 
