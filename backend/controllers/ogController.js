@@ -1,9 +1,7 @@
 import {
-    addOGService,
     getOGService,
     updateOGService,
-    getAllOGService,
-    deleteOGService
+    getAllOGService
 } from "../models/ogTableService.js"
 
 // Standardized Response Function
@@ -13,18 +11,6 @@ const handleResponse = (res, status, message, data = null) => {
         message,
         data,
     });
-};
-
-export const addOG = async(req, res, next) => {
-    const {name, score} = req.body;
-    try 
-    {
-        const newOG = await addOGService(name, score);
-        handleResponse(res, 201, "New OG added!", newOG);
-    } catch(err)
-    {
-        next(err);
-    }
 };
 
 export const getOG = async(req, res, next) => {
@@ -51,24 +37,12 @@ export const getAllOG = async(req, res, next) => {
 };
 
 export const updateOG = async(req, res, next) => {
-    const {name, score} = req.body;
+    const {score} = req.body;
     try 
     {
-        const updatedOG = await updateOGService(req.params.id, name, score);
+        const updatedOG = await updateOGService(req.params.id, score);
         if (!updatedOG) return handleResponse(res, 404, "Not Found!");
         handleResponse(res, 200, "OG details updated successfully!", updatedOG);
-    } catch(err)
-    {
-        next(err);
-    }
-};
-
-export const deleteOG = async(req, res, next) => {
-    try 
-    {
-        const deletedOG = await deleteOGService(req.params.id);
-        if (!deletedOG) return handleResponse(res, 404, "Not Found!");
-        handleResponse(res, 200, "OG deleted successfully!", deletedOG);
     } catch(err)
     {
         next(err);
