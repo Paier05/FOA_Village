@@ -56,3 +56,12 @@ Step to Set Up:
     ii. Include "LANGUAGE plpgsql" at the end so Postgre knows how to execute the trigger function.
     iii. SERIAL automatically generates an INT, so when it is used as a foreign key, the foreign key should be INT instead of SERIAL so it takes the same INT from the primary key.
     iv. Remember to use "await" for queries so that they complete the query before executing the next function.
+
+10. Token Authorization (JWT)
+    i. First go to terminal and install json web token and bcryptjs
+    ii. Type "npm i jsonwebtoken bcryptjs cookie-parser"
+    iii. Can also install nodemon to let the server auto restart whenever changes are made
+        a. "npm i nodemon --save-dev"
+        b. Go to package.json, under Scripts add "dev": "nodemon backend/index.js",
+        c. Only put backend/ if you installed everything outside of the backend folder, otherwise if it is inside just index.js will suffice.
+        d. After that you can run the app from SwordInStone directory and just type "npm run dev"
