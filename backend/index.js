@@ -10,6 +10,7 @@ import resourcesRoute from "./routes/resourcesRoute.js";
 import landRoute from "./routes/landRoute.js";
 import freelandRoute from "./routes/freelandRoute.js";
 import wheelRoute from "./routes/wheelRoute.js";
+import ogPermittedRoute from "./routes/ogPermittedRoute.js";
 
 import errorHandling from "./middlewares/errorHandler.js";
 
@@ -42,7 +43,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Serve static files from "public" directory
-app.use(express.static(path.join(__dirname, "../frontend")));
+// app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.use(cookieParser());
 app.use(
@@ -55,6 +56,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoute);
+app.use("/api/ogpr", ogPermittedRoute);
 app.use("/api", ogRoute);
 app.use("/api", resourcesRoute);
 app.use("/api", landRoute);
