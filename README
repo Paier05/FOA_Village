@@ -65,3 +65,13 @@ Step to Set Up:
         b. Go to package.json, under Scripts add "dev": "nodemon backend/index.js",
         c. Only put backend/ if you installed everything outside of the backend folder, otherwise if it is inside just index.js will suffice.
         d. After that you can run the app from SwordInStone directory and just type "npm run dev"
+
+11. Installing React
+    i. Remember to delete the existing frontend folder, or move it somewhere else as backup
+    ii. Go to terminal and the root directory (SwordInStone) in my case, then type npx create-react-app frontend
+    iii. Go to root directory again, type "npm install concurrently --save-dev"
+    iv. Go to package.json file (the one in root directory or backend directory), and add this into scripts:
+        "start:backend": "node backend/index.js",
+        "start:frontend": "npm start --prefix frontend",
+        "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+    v. This will allow us to run both frontend and backend by just typing "npm start" in root directory
