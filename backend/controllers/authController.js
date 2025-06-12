@@ -52,7 +52,7 @@ export const login = async(req, res, next) => {
         });
 
         handleResponse(
-            res, 200, "New OG registered successfully!\nWaiting for admin's approval, this may take some time...", 
+            res, 200, "Logged in Successfully!", 
             {
                 id: user.id,
                 username: user.name,
