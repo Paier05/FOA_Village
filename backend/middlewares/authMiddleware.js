@@ -14,7 +14,7 @@ const verifyToken = (req, res, next) => {
     {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
-        console.log("The decoded user is: ", req.user);
+        // console.log(`[${req.ip}] The decoded user is:`, req.user);
         next();
     } catch(err)
     {

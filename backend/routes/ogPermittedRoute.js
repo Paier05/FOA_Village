@@ -5,10 +5,20 @@ import {
     handleTrade,
     getAvailableOGs
 } from "../controllers/ogTradeController.js";
+import { 
+    getOGLandOwned,
+    getOGResArm
+} from "../controllers/ogInfoController.js";
+import { 
+    getOGInventory 
+} from "../controllers/getOGInventoryController.js";
 
 const router = new express.Router();
 
-router.post("/trade", verifyToken, authorizeRoles("og"), handleTrade);
-router.get("/available-ogs", verifyToken, authorizeRoles("og"), getAvailableOGs);
+router.post("/trade", verifyToken, authorizeRoles("admin", "og"), handleTrade);
+router.get("/ogresarm", verifyToken, authorizeRoles("admin", "og"), getOGResArm);
+router.get("/available-ogs", verifyToken, authorizeRoles("admin", "og"), getAvailableOGs);
+router.get("/oginv", verifyToken, authorizeRoles("admin", "og"), getOGInventory);
+router.get("/oglands", verifyToken, authorizeRoles("admin", "og"), getOGLandOwned);
 
 export default router;

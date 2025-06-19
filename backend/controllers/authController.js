@@ -1,3 +1,4 @@
+import pool from "../config/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {
@@ -17,9 +18,10 @@ const handleResponse = (res, status, message, data = null) => {
 export const register = async(req, res, next) => {
     const {username, password} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
+    const client = await pool.connect();
     try 
     {
-        const newUser = await userRegisterService(username, hashedPassword);
+        const newUser = await userRegisterService(client, username, hashedPassword);
         handleResponse(res, 200, "New OG registered successfully!\nWaiting for admin's approval, this may take some time...", newUser);
     } catch(err)
     {
@@ -29,9 +31,10 @@ export const register = async(req, res, next) => {
 
 export const login = async(req, res, next) => {
     const {username, password} = req.body;
+    const client = await pool.connect();
     try 
     {
-        const user = await userFindByNameService(username);
+        const user = await userFindByNameService(client, username);
         if (!user) return handleResponse(res, 404, "Not Found!");
         
         const isMatch = await bcrypt.compare(password, user.password);
