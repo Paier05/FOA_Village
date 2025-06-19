@@ -1,0 +1,16 @@
+import React from "react";
+import GameTimerDisplay from "../../components/timerComponent/timerDisplay.js";
+import TimerControls from "../../components/timerComponent/timerControl.js";
+import Leaderboard from "../../components/leaderboardComponent/leaderboard.js";
+
+const AdminHomePage = () => {
+  return (
+    <div style={{ padding: "2rem", maxWidth: "600px", margin: "auto" }}>
+      <Leaderboard />
+      <GameTimerDisplay />
+      <TimerControls />
+    </div>
+  );
+};
+
+export default AdminHomePage;

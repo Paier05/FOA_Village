@@ -1,0 +1,9 @@
+.auth-page-background {
+    min-height: 100vh;
+    background: #6b73ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}

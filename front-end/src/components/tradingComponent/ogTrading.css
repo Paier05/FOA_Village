@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+.og-trading-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2d1b57, #1e1e2f);
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  box-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.og-trading-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #ffdf00;
+}
+
+.og-trading-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.og-trading-slider-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+}
+
+.og-trading-slider-row label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.og-trading-resource-name {
+  color: #ffdf00;
+}
+
+.og-trading-resource-value {
+  color: #ff3b3b;
+  font-weight: bold;
+  margin-left: 4px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  background: #444;
+  outline: none;
+  transition: box-shadow 0.2s ease, background 0.3s ease;
+  box-shadow: 0 0 8px rgba(108, 92, 231, 0.6);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+input[type="range"]:active {
+  background: linear-gradient(90deg, violet, violet);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.7);
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  background-color: #ffdf00;
+}
+
+button:disabled,
+button[disabled] {
+  opacity: 0.5;           /* visually faded */
+  cursor: not-allowed;    /* cursor indicates no click */
+  pointer-events: none;   /* no mouse events */
+}
+
+.og-trading-button-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.og-trading-btn, .og-trading-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.og-trading-btn {
+  background: #28a745;
+  color: white;
+}
+
+.og-trading-clear-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.og-trading-btn:hover, .og-trading-clear-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.4);
+}
+
+.og-trading-scroll-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.og-trading-scroll-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.og-trading-scroll-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.og-trading-scroll-list::-webkit-scrollbar-track {
+  background: #1e1e2f;
+  border-radius: 8px;
+}
+
+.og-trading-scroll-list::-webkit-scrollbar-thumb {
+  background-color: #6c5ce7;
+  border-radius: 8px;
+}
+
+.og-trading-item {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  font-size: 1.4rem;
+  border-radius: 8px;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.og-trading-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.03);
+}
+
+.og-trading-item.selected {
+  background-color: #341f97;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+  border: 2px solid #a29bfe;
+}
+
+.og-trading-scroll-arrow {
+  background-color: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #a29bfe;
+  cursor: pointer;
+  transition: transform 0.2s, color 0.3s;
+}
+
+.og-trading-scroll-arrow:hover {
+  color: #ffffff;
+  transform: scale(1.2);
+}
+
+.army-name {
+  font-weight: 900;
+  font-size: 1.3em;          /* bigger font */
+  color: #b19cd9;            /* light purple */
+}
+
+.army-value {
+  font-weight: 900;
+  font-size: 1.3em;          /* same big font */
+  color: #ff4444;            /* red */
+  margin-left: 12px;
+}
+
+/* Increased gap between army slider and resources */
+.train-army-container > div:not(:last-child) {
+  margin-bottom: 24px; /* bigger spacing */
+}
+
+/* Army slider styling unchanged, keep emphasis */
+.army-amount-slider {
+  cursor: pointer;
+  height: 14px;
+  border-radius: 8px;
+  appearance: none;
+  outline: none;
+  margin-top: 6px;
+  background: linear-gradient(to right, #7d4fff 0%, #7d4fff 50%, #444 50%, #444 100%);
+  transition: background 0.3s ease;
+}
+
+.og-battle-scroll-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap; /* responsive for small screens */
+}
+
+.og-battle-icon {
+  font-size: 2rem;
+  color: #ffdf00;
+  padding: 0 1rem;
+  text-shadow: 0 0 10px #ffdf00;
+}
