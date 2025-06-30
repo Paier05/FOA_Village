@@ -1,0 +1,188 @@
+.sidebar-container {
+  width: 220px;
+  background: #f9f3e4;
+  border: 3px solid #a17c50;
+  color: #4b2e17;
+  padding: 2rem 1.2rem;
+  font-family: 'Cinzel', serif;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 0 15px 15px 0;
+  box-shadow: inset 0 0 20px rgba(131, 94, 40, 0.4), 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  overflow-x: hidden;
+  transform: translateX(0);
+}
+
+.sidebar-container.collapsed {
+  transform: translateX(-100%);
+}
+
+.sidebar-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling for WebKit browsers (Chrome, Edge, Safari) */
+.sidebar-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-container::-webkit-scrollbar-track {
+  background: #f9f3e4; /* parchment background */
+  border-left: 2px solid #a17c50; /* inner edge detail */
+}
+
+.sidebar-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #a17c50, #8a643b); /* brown gradient */
+  border-radius: 5px;
+  border: 1px solid #7a5c3a;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #926c40, #6e4b2b);
+}
+
+/* Fallback for browsers that don’t support custom scrollbars (like older Safari) */
+@supports not selector(::-webkit-scrollbar) {
+  .sidebar-container {
+    scrollbar-width: auto;
+  }
+}
+
+.sidebar-header {
+  margin-bottom: 30px;
+}
+
+.sidebar-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #5b3b1c;
+  margin: 0;
+  white-space: nowrap;
+  text-shadow: 1px 1px #e5d1a8;
+}
+
+/* Toggle button */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 20px;
+  left: 220px;
+  transition: left 0.3s ease, background 0.3s ease;
+  width: 40px;
+  height: 40px;
+  background: #b8926c;
+  border: 2px solid #7a5c3a;
+  border-radius: 0 12px 12px 0;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+}
+
+.sidebar-toggle-btn.collapsed {
+  left: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #a17c50;
+  box-shadow: 0 0 10px #e7c28b, 0 0 20px #d1a161;
+}
+
+/* Sidebar navigation layout */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Sidebar links */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  background: #fdf8e4;
+  color: #3b2a1e;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 2px solid #a17c50;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Georgia', serif;
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.sidebar-link:hover {
+  background: #f1e4c1;
+  transform: scale(1.03);
+  box-shadow: 0 0 10px #e7c28b;
+}
+
+.sidebar-link.active {
+  background: #e9d6b0;
+  color: #5b3b1c;
+  border-color: #7a5c3a;
+}
+
+.sidebar-container.collapsed .sidebar-link {
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Logout button */
+.logout-btn {
+  background: linear-gradient(145deg, #b76e6e, #a14c4c);
+  color: #fffdf5;
+  font-family: 'Cinzel', serif;
+  border: 2px solid #7a5c3a;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: auto;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(145deg, #a14c4c, #823838);
+  box-shadow: 0 0 12px #d88c8c;
+  transform: scale(1.05);
+}
+
+.sidebar-container.collapsed .logout-btn {
+  justify-content: center;
+  padding: 10px;
+}
+
+.logout-icon {
+  color: #fffacd;
+  font-size: 18px;
+}
+
+.logout-btn:hover .logout-icon {
+  color: #fff;
+}
+
+.sidebar-icon {
+  font-size: 18px;
+}
+
+/* Divider */
+.sidebar-divider {
+  border: none;
+  border-bottom: 2px solid #a17c50;
+  margin: 1rem 0;
+}

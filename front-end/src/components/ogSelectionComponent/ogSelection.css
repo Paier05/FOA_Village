@@ -1,0 +1,101 @@
+.all-og-selector-container {
+  width: 100%;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  background: #f9f3e4;
+  border: 3px solid #a17c50;
+  border-radius: 15px;
+  box-shadow: inset 0 0 20px rgba(131, 94, 40, 0.4),
+              0 0 10px rgba(0, 0, 0, 0.2);
+  color: #4b2e17;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  text-align: center;
+}
+
+.all-og-selector-container h3 {
+  font-size: 26px;
+  font-weight: bold;
+  color: #5b3b1c;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px #e5d1a8;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif !important;
+}
+
+/* Scrollable list with parchment box style */
+.all-og-scroll-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: #fdf8e4;
+  border: 2px solid #a17c50;
+  box-shadow: inset 0 0 10px rgba(170, 135, 85, 0.3);
+}
+
+.all-og-scroll-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.all-og-scroll-list::-webkit-scrollbar-track {
+  background: #f5ead5;
+  border-radius: 8px;
+}
+
+.all-og-scroll-list::-webkit-scrollbar-thumb {
+  background-color: #a17c50;
+  border-radius: 8px;
+}
+
+/* OG item */
+.all-og-item {
+  padding: 0.8rem 1.2rem;
+  margin: 0.5rem 0;
+  font-size: 18px;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #3b2a1e;
+  cursor: pointer;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  transition: background 0.3s, transform 0.2s, border-color 0.3s;;
+  border: 2px solid transparent;
+}
+
+.all-og-item:hover {
+  background-color: rgba(225, 204, 164, 0.4);
+  transform: scale(1.02);
+}
+
+/* Selected OG */
+.all-og-item.selected {
+  background-color: #e9d6b0;
+  font-weight: bold;
+  border: 2px solid #a17c50;
+  box-shadow: 0 0 10px rgba(218, 165, 32, 0.4);
+}
+
+/* Up/Down buttons */
+.all-og-scroll-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.all-scroll-arrow {
+  background: linear-gradient(145deg, #b8926c, #a17c50);
+  color: #fffdf5;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  border: 2px solid #7a5c3a;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.all-scroll-arrow:hover {
+  background: linear-gradient(145deg, #a17c50, #8c663f);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #e7c28b, 0 0 20px #d1a161;
+}

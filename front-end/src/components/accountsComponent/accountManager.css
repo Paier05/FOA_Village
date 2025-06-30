@@ -1,0 +1,201 @@
+:root {
+  --medieval-brown: #e6d3b3;
+  --medieval-border: #8b5e3c;
+  --medieval-dark: #5b3924;
+  --light-gold: #ffdf9f;
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --blue: #3498db;
+  --orange: #e67e22;
+}
+
+/* Container */
+.og-trading-container {
+  padding: 2rem;
+  border-radius: 16px;
+  background: var(--medieval-brown);
+  border: 6px solid var(--medieval-border);
+  box-shadow: 0 0 15px rgba(139, 94, 60, 0.5);
+}
+
+/* Title */
+.og-trading-medieval-title {
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  font-size: 2rem;
+  text-align: center;
+  color: var(--medieval-dark);
+  text-shadow: 1px 1px 0 #fff7dc;
+  margin-bottom: 1rem;
+}
+
+/* Table */
+.admin-user-table {
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  margin: 0 auto;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  background-color: #f8f2e3;
+  color: #3c2c1a;
+  border: 3px solid var(--medieval-border);
+}
+
+.admin-user-table th,
+.admin-user-table td {
+  padding: 12px;
+  border: 1px solid #d3b58f;
+  text-align: center;
+}
+
+.admin-user-table th {
+  background-color: #d6b77e;
+  font-weight: bold;
+  color: #2f1d0f;
+}
+
+.admin-user-table tr:nth-child(even) {
+  background-color: #f3e7ce;
+}
+
+/* Role coloring */
+td[style] {
+  font-weight: bold;
+}
+
+/* Buttons */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.promote { background-color: var(--blue); }
+.demote  { background-color: var(--orange); }
+.activate { background-color: var(--green); }
+.deactivate { background-color: var(--red); }
+
+.promote:hover { background-color: #2a80b9; }
+.demote:hover  { background-color: #cf6920; }
+.activate:hover { background-color: #29b168; }
+.deactivate:hover { background-color: #c0392b; }
+
+/* Dropdowns */
+.dropdown-action {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: #fffef8;
+  border: 2px solid #d4b08a;
+  border-radius: 8px;
+  min-width: 120px;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  animation: dropdownFade 0.2s ease-in-out;
+}
+
+.dropdown-menu div {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #3c2c1a;
+}
+
+.dropdown-menu div:hover {
+  background-color: #f1e3c5;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-10%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background-color: #f6e9cd;
+  color: #3e2d1d;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(91, 57, 36, 0.7);
+  text-align: center;
+  border: 4px solid var(--medieval-border);
+}
+
+.modal h3 {
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  font-size: 1.5rem;
+  color: var(--medieval-dark);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal p {
+  margin-bottom: 1.5rem;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.modal-confirm,
+.modal-cancel {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s;
+}
+
+.modal-confirm {
+  background-color: var(--green);
+  color: white;
+}
+
+.modal-cancel {
+  background-color: var(--red);
+  color: white;
+}
+
+.modal-confirm:hover,
+.modal-cancel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.admin-confirm-button-icon {
+  transform: translateY(2px);
+}

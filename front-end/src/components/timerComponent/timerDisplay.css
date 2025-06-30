@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+.timer-container {
+  background: #f9f3e4;
+  border: 3px solid #a17c50;
+  border-radius: 16px;
+  color: #3b2a1e;
+  text-align: center;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  padding: 20px 28px;
+  max-width: 95vw;
+  min-width: 280px;
+  width: fit-content;
+  margin: 20px auto;
+  box-shadow:
+    inset 0 0 20px rgba(131, 94, 40, 0.4),
+    0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.timer-phase-title {
+  font-size: clamp(18px, 5vw, 26px);
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #5b3b1c;
+  text-shadow: 1px 1px #e5d1a8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.timer-value {
+  font-size: clamp(32px, 8vw, 64px);
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #3b2a1e;
+  letter-spacing: 2px;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  font-family: 'MedievalSharp', cursive;
+}
+
+.timer-warning {
+  color: #a11e1e;
+  text-shadow: 0 0 10px rgba(161, 30, 30, 0.8);
+  animation: pulseGlow 1s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from {
+    text-shadow: 0 0 6px rgba(161, 30, 30, 0.6);
+  }
+  to {
+    text-shadow: 0 0 16px rgba(161, 30, 30, 1);
+  }
+}
+
+.next-phase {
+  font-size: clamp(13px, 4vw, 18px);
+  color: #6b4e29;
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+}
+
+.timer-ended-msg {
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: bold;
+  color: #a52a2a;
+  margin-bottom: 8px;
+  text-shadow: 1px 1px #f0d8aa;
+}
+
+.timer-wait-msg {
+  font-size: clamp(14px, 4vw, 18px);
+  color: #5e4228;
+}

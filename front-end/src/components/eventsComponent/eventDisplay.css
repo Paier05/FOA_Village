@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+.event-container {
+  background: #f9f3e4;
+  border: 3px solid #a17c50;
+  border-radius: 16px;
+  color: #3b2a1e;
+  text-align: center;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  padding: 20px 28px;
+  max-width: 95vw;
+  min-width: 280px;
+  width: fit-content;
+  margin: 20px auto;
+  box-shadow:
+    inset 0 0 20px rgba(131, 94, 40, 0.4),
+    0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.event-name {
+  font-size: clamp(32px, 8vw, 64px);
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #a11e1e;
+  text-shadow: 0 0 10px rgba(161, 30, 30, 0.8);
+  animation: blinkRed 1s infinite;
+  font-family: 'MedievalSharp', cursive;
+  letter-spacing: 1px;
+}
+
+@keyframes blinkRed {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+  }
+  50% {
+    opacity: 0.6;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+}
+
+.event-countdown {
+  font-size: clamp(18px, 4vw, 26px);
+  color: #3b2a1e;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: bold;
+  font-family: 'MedievalSharp', cursive;
+}
+
+.event-description {
+  font-size: clamp(14px, 4vw, 20px);
+  color: #5b3b1c;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-style: italic;
+}
+
+.event-peace {
+  text-align: center;
+  font-weight: bold;
+  font-size: clamp(18px, 5vw, 26px);
+  color: #14ab00;
+  text-shadow: 1px 1px #e5d1a8;
+}
+
+.peace-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.icon {
+  font-size: 18px;
+  margin-right: 4px;
+  color: #7c5a36;
+}
+
+/* Blink Red */
+.blink-red {
+  animation: blinkEffectRed 1s infinite;
+  color: #a11e1e;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+}
+
+/* Blink Green */
+.blink-green {
+  animation: blinkEffectGreen 1s infinite;
+  color: #14ab00;
+  text-shadow: 0 0 8px rgba(20, 171, 0, 0.8);
+}
+
+/* Blink Brown (negative effect) */
+.blink-brown {
+  animation: blinkEffectBrown 1s infinite;
+  color: #6a0dad;
+  text-shadow: 0 0 8px rgba(106, 13, 173, 0.8);
+}
+
+.blink-blue {
+  animation: blinkEffectBlue 1s infinite;
+  color: #0b3d91;
+  text-shadow: 0 0 8px rgba(11, 61, 145, 0.8);
+}
+
+@keyframes blinkEffectBlue {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(11, 61, 145, 0.8); }
+  50% { opacity: 0.6; text-shadow: 0 0 20px rgba(11, 61, 145, 0.5); }
+}
+
+@keyframes blinkEffectRed {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(255, 0, 0, 0.8); }
+  50% { opacity: 0.6; text-shadow: 0 0 18px rgba(255, 0, 0, 0.4); }
+}
+
+@keyframes blinkEffectGreen {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(20, 171, 0, 0.8); }
+  50% { opacity: 0.6; text-shadow: 0 0 18px rgba(20, 171, 0, 0.4); }
+}
+
+@keyframes blinkEffectBrown {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(106, 13, 173, 0.8); }
+  50% { opacity: 0.6; text-shadow: 0 0 18px rgba(106, 13, 173, 0.4); }
+}
+
+.event-name {
+  font-size: clamp(24px, 6vw, 42px);
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-family: 'MedievalSharp', cursive;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.event-icon {
+  font-size: 1.0em;
+  transform: translateY(7px);
+}
+  
+.event-countdown {
+  font-size: clamp(28px, 6vw, 48px);
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
