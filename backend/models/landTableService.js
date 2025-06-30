@@ -1,6 +1,6 @@
 export const getOGLandService = async(client, id) => {
     const result = await client.query(
-        "SELECT wood, bricks, livestock, wheat, ore, textiles FROM land WHERE id = $1",
+        "SELECT wood, bricks, livestock, wheat, ore, textiles FROM land WHERE id = $1 FOR UPDATE",
         [id]
     );
     return result.rows[0];
@@ -23,7 +23,7 @@ export const updateOGLandService = async(client, id, wood, bricks, livestock, wh
 
 export const getOGSpecificLandService = async(client, id, type) => {
     const result = await client.query(
-        `SELECT ${type} FROM land WHERE id = $1`,
+        `SELECT ${type} FROM land WHERE id = $1 FOR UPDATE`,
         [id]
     );
     return result.rows[0]?.[type];

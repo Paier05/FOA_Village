@@ -1,6 +1,6 @@
 export const getOGResourcesService = async(client, id) => {
     const result = await client.query(
-        "SELECT wood, bricks, livestock, wheat, ore, textiles FROM resources WHERE id = $1",
+        "SELECT wood, bricks, livestock, wheat, ore, textiles FROM resources WHERE id = $1 FOR UPDATE",
         [id]
     );
     return result.rows[0];

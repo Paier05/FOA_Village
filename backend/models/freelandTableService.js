@@ -15,7 +15,7 @@ export const updateAllFreelandService = async(client, wood, bricks, livestock, w
 
 export const getSpecificFreelandService = async(client, type) => {
     const result = await client.query(
-        `SELECT ${type} FROM freeland`,
+        `SELECT ${type} FROM freeland FOR UPDATE`,
     );
     return result.rows[0]?.[type];
 };

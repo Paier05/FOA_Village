@@ -5,15 +5,8 @@ import {
     userRegisterService,
     userFindByNameService
 } from "../models/usersModel.js";
+import handleResponse from "../middlewares/responseHandler.js";
 
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const register = async(req, res, next) => {
     const {username, password} = req.body;
@@ -62,6 +55,19 @@ export const login = async(req, res, next) => {
                 role: user.role
             }
         );
+
+    } catch(err)
+    {
+        next(err);
+    }
+};
+
+
+export const logout = async(req, res, next) => {
+    try 
+    {
+        res.clearCookie('token');
+        handleResponse(res, 200, "Logged out successfully!")
 
     } catch(err)
     {

@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import {
     getGamePhaseService,
     updateGamePhaseService
@@ -10,14 +11,6 @@ import {
     resetArmyService 
 } from "../models/ogTableService.js";
 
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const getGamePhase = async(req, res) => {
     const client = await pool.connect();
@@ -30,7 +23,7 @@ export const getGamePhase = async(req, res) => {
     } catch(err)
     {
         await client.query("ROLLBACK");
-        next(err);
+        handleResponse(res, 400, `Failed to retrieve game phase: ${err}`);
     } finally
     {
         client.release();

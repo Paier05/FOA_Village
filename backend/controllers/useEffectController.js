@@ -1,15 +1,7 @@
 import pool from "../config/db.js";
-import { getOGInventoryUsableEffectService, useExistingEffectService } from "../models/inventoryTableService.js";
+import handleResponse from "../middlewares/responseHandler.js";
+import { getExistingEffectForUseService, getOGInventoryUsableEffectService, useExistingEffectService } from "../models/inventoryTableService.js";
 
-
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const useOGEffect = async(req, res) => {
     const { effect_id } = req.body;
@@ -18,6 +10,15 @@ export const useOGEffect = async(req, res) => {
     try 
     {
         await client.query("BEGIN");
+        const effect = await getExistingEffectForUseService(client, effect_id);
+        if (!effect)
+        {
+            throw new Error("Effect not found.");
+        }
+        if (effect.status === 0) 
+        {
+            throw new Error("Effect already used.");
+        }
         await useExistingEffectService(client, effect_id);
         await client.query("COMMIT");
         handleResponse(res, 200, "Effect used successfully!");

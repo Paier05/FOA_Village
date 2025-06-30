@@ -23,6 +23,8 @@ import {
   createWheelTable,
   createGamePhaseTable,
   initializeGamePhaseTable,
+  createEventsTable,
+  initializeEventsTable,
   createInventoryTable,
   dropUsersTableTrigger,
   dropLandTableTrigger,
@@ -79,6 +81,8 @@ async function initializeDatabase()
     await createGamePhaseTable();
     await initializeGamePhaseTable();
     await createInventoryTable();
+    await createEventsTable();
+    await initializeEventsTable();
     await dropUsersTableTrigger();
     await dropLandTableTrigger();
     await dropLandTableScoreTrigger();

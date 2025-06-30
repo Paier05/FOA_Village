@@ -17,7 +17,7 @@ export const getMerlinMagicDetailsService = async(client, owner) => {
 
 export const getExistingEffectService = async(client, owner, effect, target, type) => {
     const result = await client.query(
-        "SELECT effect_id FROM inventory WHERE id = $1 AND effect = $2 AND target = $3 AND type = $4 AND status = 1",
+        "SELECT effect_id FROM inventory WHERE id = $1 AND effect = $2 AND target = $3 AND type = $4 AND status = 1 FOR UPDATE",
         [owner, effect, target, type]
     );
     return result.rows[0]?.effect_id;
@@ -25,7 +25,7 @@ export const getExistingEffectService = async(client, owner, effect, target, typ
 
 export const getExistingMerlinMagicService = async(client, owner) => {
     const result = await client.query(
-        "SELECT effect_id FROM inventory WHERE id = $1 AND effect = '梅林的魔法' AND status = 1",
+        "SELECT effect_id FROM inventory WHERE id = $1 AND effect = '梅林的魔法' AND status = 1 FOR UPDATE",
         [owner]
     );
     return result.rows[0]?.effect_id;
@@ -102,6 +102,15 @@ export const getOGInventoryUsableEffectService = async (client, owner) => {
 export const useExistingEffectService = async(client, effect_id) => {
     const result = await client.query(
         "UPDATE inventory SET status = 0 WHERE effect_id = $1 RETURNING *",
+        [effect_id]
+    );
+    return result.rows[0];
+};
+
+
+export const getExistingEffectForUseService = async(client, effect_id) => {
+    const result = await client.query(
+        "SELECT * FROM inventory WHERE effect_id = $1 FOR UPDATE",
         [effect_id]
     );
     return result.rows[0];

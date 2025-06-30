@@ -1,18 +1,10 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     getOGLandService, 
     updateOGLandService 
 } from "../models/landTableService.js";
 
-
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const landTransfer = async(req, res) => {
     const { winnerID, loserID, landChanges } = req.body;

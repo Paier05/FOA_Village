@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     addOGEffectService,
     getExistingEffectService,
@@ -22,15 +23,6 @@ import {
     updateOGResourcesService 
 } from "../models/resourcesTableService.js";
 
-
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const ogEffectAddition = async(req, res) => {
     const { ogID, effect, targetID, type, resourcesChanges } = req.body;

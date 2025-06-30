@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     getOGResourcesService, 
     updateOGResourcesService 
@@ -15,7 +16,7 @@ export const handleTrade = async (req, res) =>
 
     if (!toOg || typeof resources !== "object") 
     {
-        return res.status(400).json({ message: "Invalid trade payload." });
+        return handleResponse(res, 400, "Invalid trade payload.");
     }
 
     const client = await pool.connect();
@@ -82,13 +83,13 @@ export const handleTrade = async (req, res) =>
             );
 
         await client.query("COMMIT");
-        res.status(200).json({ message: "Trade successful!" });
+        handleResponse(res, 200, "Trade successful!");
 
     } catch (err) 
     {
         await client.query("ROLLBACK");
         console.error("Trade error:", err);
-        res.status(400).json({ message: err.message });
+        handleResponse(res, 400, `Trade failed: ${err.message}`);
     } finally 
     {
         client.release();
@@ -106,11 +107,11 @@ export const getAvailableOGs = async (req, res, next) =>
         const currentUserId = req.user.id;
         const ogList = await userGetAvailableOGService(client, currentUserId);
         await client.query("COMMIT");
-        res.status(200).json(ogList);
+        handleResponse(res, 200, "Successfully retrieved available OGs for trading!", ogList);
     } catch (err) 
     {
         await client.query("ROLLBACK");
-        next(err);
+        handleResponse(res, 400, `Failed to retrieve available OGs for trading: ${err}`);
     } finally 
     {
         client.release();

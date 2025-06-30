@@ -6,13 +6,19 @@ import {
 } from "../controllers/gamePhaseController.js";
 import { 
     getLeaderboard,
-    getAllResourcesWithheld
+    getAllResourcesWithheld,
+    getFreeLandLeft
 } from "../controllers/ogInfoController.js";
+import { 
+    getEvent 
+} from "../controllers/eventsController.js";
 
 const router = new express.Router();
 
 router.get("/gamephase", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getGamePhase);
+router.get("/events", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getEvent);
 router.get("/leaderboard", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getLeaderboard);
 router.get("/allreswithheld", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getAllResourcesWithheld);
+router.get("/allfreeland", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getFreeLandLeft);
 
 export default router;

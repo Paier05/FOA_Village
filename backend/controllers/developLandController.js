@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     getSpecificFreelandService, 
     updateSpecificFreelandService 
@@ -11,14 +12,6 @@ import {
     updateOGResourcesService 
 } from "../models/resourcesTableService.js";
 
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const developLand = async(req, res) => {
     const { ogID, resourcesChanges, landType} = req.body;

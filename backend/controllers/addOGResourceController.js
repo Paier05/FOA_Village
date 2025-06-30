@@ -16,17 +16,23 @@ import {
 import {
     userGetAllOGService
 } from "../models/usersModel.js";
+import handleResponse from "../middlewares/responseHandler.js";
+import { getEventService } from "../models/eventsTableService.js";
 
-
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
+const EVENTS = {
+    "干旱": { resource: "wheat", type: 0 },
+    "丰收时期": { resource: "wheat", type: 2 },
+    "瘟疫蔓延": { resource: "livestock", type: 0 },
+    "畜牧繁荣": { resource: "livestock", type: 2 },
+    "森林失火": { resource: "wood", type: 0 },
+    "伐木盛年": { resource: "wood", type: 2 },
+    "矿井坍塌": { resource: "bricks", type: 0 },
+    "富矿突现": { resource: "bricks", type: 2 },
+    "王室修城令": { resource: "ore", type: 0 },
+    "千锤百炼": { resource: "ore", type: 2 },
+    "蛾灾肆虐": { resource: "textiles", type: 0 },
+    "织女降凡": { resource: "textiles", type: 2 }
 };
-
 
 export const ogResourcesAddition = async(req, res, next) => {
     const { ogID, resourcesChanges } = req.body;
@@ -49,6 +55,18 @@ export const ogResourcesAddition = async(req, res, next) => {
             throw new Error("Invalid OG ID(s).");
         }
         
+        // Check for 突发事件
+        const event = await getEventService(client);
+        const [h, m, s] = event.expiry.split(":").map(Number);
+        const now = new Date();
+        const expiryUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), h, m, s));
+        const remaining = Math.max(0, Math.floor((expiryUTC - now) / 1000));
+
+        if (remaining > 0)
+        {
+            resourcesChanges[EVENTS[event.event].resource] *= EVENTS[event.event].type;
+        }
+
         // Check for 天道酬勤 & 天道酬勤 + ---- 只有通过小游戏奖励获得的所有资源 x2
         const checktdcq = await getDebuffPerpetratorIDService(client, "天道酬勤", ogID, "others");
         const checktdcqp = await getDebuffPerpetratorIDService(client, "天道酬勤+", ogID, "others");

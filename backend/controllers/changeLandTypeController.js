@@ -1,18 +1,10 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     getOGSpecificLandService, 
     useSwordInStoneEffectService 
 } from "../models/landTableService.js";
 
-
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const changeLandProperty = async(req, res) => {
     const { ogID, oldType, newType} = req.body;

@@ -1,18 +1,11 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     getAllAccountsService, 
     promoteUserService, 
     validateUserService 
 } from "../models/usersModel.js";
 
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const getAllAccounts = async(req, res) => {
     const client = await pool.connect();

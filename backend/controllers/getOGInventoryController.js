@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     getOGInventoryBuffService, 
     getOGInventoryDebuffService 
@@ -7,15 +8,6 @@ import {
     userGetNameByIDService 
 } from "../models/usersModel.js";
 
-
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const getOGInventory = async(req, res) => {
     const id = req.params.id || req.user.id;

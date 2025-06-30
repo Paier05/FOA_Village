@@ -209,6 +209,45 @@ export const createInventoryTable = async() => {
 };
 
 
+export const createEventsTable = async() => {
+    const queryText = `
+    CREATE TABLE IF NOT EXISTS events (
+    event TEXT CHECK (event IN (
+        '干旱', '丰收时期', '瘟疫蔓延', '畜牧繁荣', 
+        '森林失火', '伐木盛年', '矿井坍塌', '富矿突现',
+        '王室修城令', '千锤百炼', '蛾灾肆虐', '织女降凡'
+    )) NOT NULL,
+    expiry TIME NOT NULL);
+    `;
+    try 
+    {
+        await pool.query(queryText);
+    } catch (error)
+    {
+        console.log("Error creating events table: ", error);
+    };
+};
+
+
+export const initializeEventsTable = async() => {
+    const queryText = `
+    DO $$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM events) THEN
+        INSERT INTO events(event, expiry) VALUES ('干旱', '00:00:00');
+        END IF;
+    END $$;
+    `;
+    try
+    {
+        await pool.query(queryText);
+    } catch (error)
+    {
+        console.log("Error initializing events table: ", error);
+    };
+};
+
+
 export const dropUsersTableTrigger = async() => {
     const queryText = `
     DROP TRIGGER IF EXISTS after_register ON users;

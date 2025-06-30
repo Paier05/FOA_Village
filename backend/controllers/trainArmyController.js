@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import handleResponse from "../middlewares/responseHandler.js";
 import { 
     updateOGArmyService 
 } from "../models/ogTableService.js";
@@ -7,15 +8,6 @@ import {
     updateOGResourcesService 
 } from "../models/resourcesTableService.js";
 
-
-// Standardized Response Function
-const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data,
-    });
-};
 
 export const trainArmy = async(req, res) => {
     const { ogID, resourcesChanges, armyAmount } = req.body;

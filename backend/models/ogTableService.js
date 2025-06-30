@@ -1,6 +1,6 @@
 export const getOGService = async(client, id) => {
     const result = await client.query(
-        "SELECT score, army, fdcx, fdcx_plus, mlmf, smmf, smmf_plus, fygs, szj, pzyy FROM og WHERE id = $1",
+        "SELECT score, army, fdcx, fdcx_plus, mlmf, smmf, smmf_plus, fygs, szj, pzyy FROM og WHERE id = $1 FOR UPDATE",
         [id]
     );
     return result.rows[0];
@@ -11,6 +11,14 @@ export const getAllOGService = async(client) => {
         "SELECT * FROM og",
     );
     return result.rows;
+};
+
+export const getOGArmyService = async(client, id) => {
+    const result = await client.query(
+        "SELECT army FROM og WHERE id = $1 FOR UPDATE",
+        [id]
+    );
+    return result.rows[0]?.army;
 };
 
 export const updateOGArmyService = async(client, id, amount) => {
@@ -90,4 +98,13 @@ export const resetArmyService = async(client) => {
         "UPDATE og SET army = 0 RETURNING *"
     );
     return result.rows;
+};
+
+
+export const updateSpecificEffectConstraintService = async(client, id, effect, changes) => {
+    const result = await client.query(
+        `UPDATE og SET ${effect} = ${effect} + $1 WHERE id = $2 RETURNING *`,
+        [changes, id]
+    );
+    return result.rows[0];
 };
