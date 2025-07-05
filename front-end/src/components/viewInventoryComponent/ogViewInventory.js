@@ -4,9 +4,9 @@ import axiosInstance from "../../api/axiosInstance.js";
 import MedievalSpinner from "../loadingComponent/spinner.js";
 import "./ogInventory.css";
 
-const noTargetNameEffects = [ "防御工事", "知己知彼", "天道酬勤", "天道酬勤+", "兵不厌诈", "兵不厌诈+", "抛砖引玉", "十面埋伏", "十面埋伏+" ];
-const noTargetEffects = [ "防御工事", "知己知彼", "天道酬勤", "天道酬勤+", "兵不厌诈", "兵不厌诈+", "抛砖引玉", "十面埋伏", "十面埋伏+", "梅林的魔法" ];
-const noExpiryEffects = [ "防御工事", "石中剑", "知己知彼", "兵不厌诈", "兵不厌诈+", "抛砖引玉", "十面埋伏", "十面埋伏+" ];
+const noTargetNameEffects = [ "防御工事", "知己知彼", "天道酬勤", "天道酬勤+", "兵不厌诈", "抛砖引玉", "十面埋伏" ];
+const noTargetEffects = [ "防御工事", "知己知彼", "天道酬勤", "天道酬勤+", "兵不厌诈", "抛砖引玉", "十面埋伏", "梅林的魔法" ];
+const noExpiryEffects = [ "防御工事", "石中剑", "知己知彼", "兵不厌诈", "抛砖引玉", "十面埋伏" ];
 
 const OGOwnInventory = () => {
     const [inventory, setInventory] = useState(null);

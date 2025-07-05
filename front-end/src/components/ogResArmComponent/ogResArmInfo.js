@@ -6,6 +6,7 @@ import {
 import { MdMilitaryTech } from "react-icons/md";
 import "./ogResArmInfo.css";
 import MedievalSpinner from "../loadingComponent/spinner.js";
+import { FaCoins } from "react-icons/fa";
 
 const getIcon = (type) => {
     const icons = {
@@ -15,7 +16,8 @@ const getIcon = (type) => {
         bricks: <GiBrickWall className="res-icon" />,
         wood: <GiWoodPile className="res-icon" />,
         livestock: <GiSheep className="res-icon" />,
-        army: <MdMilitaryTech className="res-icon military-icon" />
+        army: <MdMilitaryTech className="res-icon military-icon" />,
+        gold: <FaCoins className="res-icon military-icon" />
     };
     return icons[type] || <span className="res-icon">📦</span>;
 };
@@ -27,7 +29,8 @@ const resourceLabels = {
     bricks: "砖块",
     wood: "木头",
     livestock: "牲畜",
-    army: "军队"
+    army: "军队",
+    gold: "金币"
 };
 
 const OGResArmInfo = () => {

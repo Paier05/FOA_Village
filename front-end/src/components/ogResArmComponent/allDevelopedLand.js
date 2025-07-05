@@ -28,14 +28,14 @@ const resourceLabels = {
     livestock: "牲畜",
 };
 
-const FreelandInfo = () => {
-    const [freeland, setFreeland] = useState(null);
+const AllDevelopedLandInfo = () => {
+    const [devdland, setDevdland] = useState(null);
     const prevValues = useRef({});
     const valueRefs = useRef({});
 
-    const fetchFreeland = async () => {
+    const fetchDevdland = async () => {
         try {
-            const res = await axiosInstance.get("/allpr/allfreeland");
+            const res = await axiosInstance.get("/apr/totaldevlands");
             const newData = res.data.data;
 
             Object.entries(newData).forEach(([key, newValue]) => {
@@ -50,25 +50,25 @@ const FreelandInfo = () => {
                 prevValues.current[key] = newValue;
             });
 
-            setFreeland(newData);
+            setDevdland(newData);
         } catch (err) {
-            console.error("无法读取场上持有的个资源总数：", err);
+            console.error("无法读取已开发产地总数资料：", err);
         }
     };
 
     useEffect(() => {
-        fetchFreeland();
-        const poll = setInterval(fetchFreeland, 5000);
+        fetchDevdland();
+        const poll = setInterval(fetchDevdland, 5000);
         return () => clearInterval(poll);
     }, []);
 
-    if (!freeland) return <MedievalSpinner />;
+    if (!devdland) return <MedievalSpinner />;
 
     return (
         <div className="res-container fancy-dashboard">
-            <h2 className="res-header">所剩未开发产地数量</h2>
+            <h2 className="res-header">总共已开发产地数量</h2>
             <div className="res-grid">
-                {Object.entries(freeland).map(([key, value]) => (
+                {Object.entries(devdland).map(([key, value]) => (
                     <div className="res-card" key={key}>
                         {getIcon(key)}
                         <div className="res-label">{resourceLabels[key] || key}</div>
@@ -86,4 +86,4 @@ const FreelandInfo = () => {
     );
 };
 
-export default FreelandInfo;
+export default AllDevelopedLandInfo;

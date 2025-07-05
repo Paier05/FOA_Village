@@ -1,0 +1,72 @@
+.gamerule-container {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+  font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
+  background: #f9f3e4;
+  border: 3px solid #a17c50;
+  border-radius: 15px;
+  padding: 2rem;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 20px rgba(131, 94, 40, 0.4),
+              0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.gamerule-header {
+  font-size: 26px;
+  font-weight: bold;
+  color: #5b3b1c;
+  text-shadow: 1px 1px #e5d1a8;
+  margin-bottom: 1.5rem;
+}
+
+.gamerule-image {
+  width: 100%;
+  border: 2px solid #a17c50;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(107, 71, 31, 0.15);
+  -webkit-user-select: none; 
+  -moz-user-select: none;   
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.gamerule-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+.gamerule-btn {
+  border: 2px solid #a17c50;
+  border-radius: 8px;
+  background: #fdf8e4;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  color: #4b2e17;
+  cursor: pointer;
+  box-shadow: 0 0 12px #e7c28b, 0 0 18px #d1a161;
+  transition: transform 0.2s ease;
+}
+
+.gamerule-btn:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+  transform: none;
+}
+
+.gamerule-btn:not(:disabled):hover {
+  transform: scale(1.04);
+}
+
+.gamerule-page-info {
+  font-weight: bold;
+  color: #4b2e17;
+  -webkit-user-select: none; 
+  -moz-user-select: none;   
+  -ms-user-select: none;
+  user-select: none;
+}

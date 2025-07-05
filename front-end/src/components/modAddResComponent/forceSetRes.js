@@ -59,12 +59,6 @@ const ForceSetResources = () => {
             return;
         }
 
-        const hasChanges = Object.values(resourcesChanges).some(v => v === 0);
-        if (!hasChanges) {
-            alert("请选择资源改变的数量！");
-            return;
-        }
-
         try {
             await axiosInstance.put("/apr/forceset/ogres", {
                 ogID: selectedOG,

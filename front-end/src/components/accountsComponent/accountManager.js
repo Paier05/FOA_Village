@@ -32,9 +32,7 @@ const AccountManager = () => {
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const showModal = (message, onConfirm) => {
@@ -95,77 +93,79 @@ const AccountManager = () => {
     return (
         <div className="og-trading-container medieval-bg">
             <h2 className="og-trading-medieval-title">用户管理面板</h2>
-            <table className="admin-user-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>用户名</th>
-                        <th>角色</th>
-                        <th>状态</th>
-                        <th>升级</th>
-                        <th>降级</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map(user => (
-                        <tr key={user.id}>
-                            <td>{user.id}</td>
-                            <td>{user.name}</td>
-                            <td style={getRoleStyle(user.role)}>{user.role}</td>
-                            <td>
-                                {user.valid ? <FaCheckCircle color="#2ecc71" /> : <FaTimesCircle color="#e74c3c" />}
-                            </td>
-                            <td>
-                                {user.role !== "admin" && getNextPromotions(user.role).length > 0 ? (
-                                    <div className="dropdown-action">
-                                        <button className="action-btn promote" onClick={() => setSelectedUser(user.id)}>
-                                            <FaArrowUp /> 升级
-                                        </button>
-                                        {selectedUser === user.id && (
-                                            <div className="dropdown-menu" ref={dropdownRef}>
-                                                {getNextPromotions(user.role).map(role => (
-                                                    <div key={role} onClick={() => handlePromote(user.id, role)}>
-                                                        {role}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : "-"}
-                            </td>
-                            <td>
-                                {user.role !== "admin" && user.role !== "og" && getNextDemotions(user.role).length > 0 ? (
-                                    <div className="dropdown-action">
-                                        <button className="action-btn demote" onClick={() => setSelectedUser(-user.id)}>
-                                            <FaArrowDown /> 降级
-                                        </button>
-                                        {selectedUser === -user.id && (
-                                            <div className="dropdown-menu" ref={dropdownRef}>
-                                                {getNextDemotions(user.role).map(role => (
-                                                    <div key={role} onClick={() => handlePromote(user.id, role)}>
-                                                        {role}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : "-"}
-                            </td>
-                            <td>
-                                {user.role !== "admin" ? (
-                                    <button
-                                        className={`action-btn ${user.valid ? "deactivate" : "activate"}`}
-                                        onClick={() => handleValidate(user.id, user.valid ? 0 : 1)}
-                                    >
-                                        {user.valid ? <><FaTimesCircle /> 停用</> : <><FaCheckCircle /> 激活</>}
-                                    </button>
-                                ) : "-"}
-                            </td>
+            <div className="admin-table-wrapper">
+                <table className="admin-user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>角色</th>
+                            <th>状态</th>
+                            <th>升级</th>
+                            <th>降级</th>
+                            <th>操作</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {users.map(user => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.name}</td>
+                                <td style={getRoleStyle(user.role)}>{user.role}</td>
+                                <td>
+                                    {user.valid ? <FaCheckCircle color="#2ecc71" /> : <FaTimesCircle color="#e74c3c" />}
+                                </td>
+                                <td>
+                                    {user.role !== "admin" && getNextPromotions(user.role).length > 0 ? (
+                                        <div className="dropdown-action">
+                                            <button className="action-btn promote" onClick={() => setSelectedUser(user.id)}>
+                                                <FaArrowUp /> 升级
+                                            </button>
+                                            {selectedUser === user.id && (
+                                                <div className="dropdown-menu" ref={dropdownRef}>
+                                                    {getNextPromotions(user.role).map(role => (
+                                                        <div key={role} onClick={() => handlePromote(user.id, role)}>
+                                                            {role}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : "-"}
+                                </td>
+                                <td>
+                                    {user.role !== "admin" && user.role !== "og" && getNextDemotions(user.role).length > 0 ? (
+                                        <div className="dropdown-action">
+                                            <button className="action-btn demote" onClick={() => setSelectedUser(-user.id)}>
+                                                <FaArrowDown /> 降级
+                                            </button>
+                                            {selectedUser === -user.id && (
+                                                <div className="dropdown-menu" ref={dropdownRef}>
+                                                    {getNextDemotions(user.role).map(role => (
+                                                        <div key={role} onClick={() => handlePromote(user.id, role)}>
+                                                            {role}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : "-"}
+                                </td>
+                                <td>
+                                    {user.role !== "admin" ? (
+                                        <button
+                                            className={`action-btn ${user.valid ? "deactivate" : "activate"}`}
+                                            onClick={() => handleValidate(user.id, user.valid ? 0 : 1)}
+                                        >
+                                            {user.valid ? <><FaTimesCircle /> 停用</> : <><FaCheckCircle /> 激活</>}
+                                        </button>
+                                    ) : "-"}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {modal.visible && (
                 <div className="modal-overlay">

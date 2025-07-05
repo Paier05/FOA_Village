@@ -5,11 +5,11 @@ import { FaHammer, FaFire } from "react-icons/fa";
 
 const PHASES = [
     "1st 发展期",
+    "1st 缓冲时间",
     "1st 战争期",
     "2nd 发展期",
+    "2nd 缓冲时间",
     "2nd 战争期",
-    "3rd 发展期",
-    "3rd 战争期",
 ];
 
 const TimerControls = () => {

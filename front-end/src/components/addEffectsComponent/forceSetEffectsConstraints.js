@@ -7,7 +7,7 @@ import { FaBroom, FaCheckCircle, FaEdit, FaTimesCircle } from "react-icons/fa";
 
 const constraintEffectOptions = [
     "釜底抽薪", "釜底抽薪+", "梅林的魔法", "十面埋伏",
-    "十面埋伏+", "防御工事", "石中剑", "抛砖引玉"
+    "防御工事", "石中剑", "抛砖引玉"
 ];
 
 const ForceSetEffectsConstraints = () => {
@@ -102,7 +102,7 @@ const ForceSetEffectsConstraints = () => {
             <div className="all-og-selector-container">
                 <h3>
                     {
-                        ["梅林的魔法", "十面埋伏", "十面埋伏+", "防御工事", "石中剑", "抛砖引玉"].includes(effect)
+                        ["梅林的魔法", "十面埋伏", "防御工事", "石中剑", "抛砖引玉"].includes(effect)
                             ? "新使用限制次数"
                             : ["釜底抽薪", "釜底抽薪+"].includes(effect)
                             ? "新被针对限制次数"

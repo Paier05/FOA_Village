@@ -59,12 +59,6 @@ const ForceSetLand = () => {
             return;
         }
 
-        const hasChanges = Object.values(landChanges).some(v => v === 0);
-        if (!hasChanges) {
-            alert("请选择产地改变的数量！");
-            return;
-        }
-
         try {
             await axiosInstance.put("/apr/forceset/ogland", {
                 ogID: selectedOG,

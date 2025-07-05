@@ -145,11 +145,38 @@
 
 .phase-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
   background: #fffaf0;
   padding: 1.2rem;
   border: 2px solid #d2b48c;
   border-radius: 12px;
+}
+
+.timer-adjust-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.adjust-input {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #a17c50;
+  border-radius: 10px;
+  width: 180px;
+  background-color: #fffaf0;
+  color: #3b2a1e;
+  font-family: inherit;
+  text-align: center;
+  box-shadow: inset 0 0 4px rgba(107, 71, 31, 0.1);
+}
+
+.adjust-input:focus {
+  outline: none;
+  border-color: #8a653f;
+  background-color: #fef6e4;
 }

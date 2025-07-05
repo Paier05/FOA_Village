@@ -5,12 +5,12 @@ import { BsClockHistory, BsFlagFill } from "react-icons/bs";
 import MedievalSpinner from "../loadingComponent/spinner.js";
 
 const NEXT_PHASE = {
-    "1st 发展期": "1st 战争期",
+    "1st 发展期": "1st 缓冲时间",
+    "1st 缓冲时间": "1st 战争期",
     "1st 战争期": "2nd 发展期",
-    "2nd 发展期": "2nd 战争期",
-    "2nd 战争期": "3rd 发展期",
-    "3rd 发展期": "3rd 战争期",
-    "3rd 战争期": "游戏结束",
+    "2nd 发展期": "2nd 缓冲时间",
+    "2nd 缓冲时间": "2nd 战争期",
+    "2nd 战争期": "游戏结束",
 };
 
 const formatTime = (seconds) => {

@@ -79,12 +79,6 @@ const DevelopLand = () => {
       return;
     }
 
-    const hasCost = Object.values(resourcesChanges).some(v => v > 0);
-    if (!hasCost) {
-      alert("请选择支付的价格！");
-      return;
-    }
-
     try {
       await axiosInstance.put("/npcpr/ogdevland", {
         ogID: selectedOG,

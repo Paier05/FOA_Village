@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import { useOG } from "../ogSelectionComponent/ogContext.js";
-import { GiShield } from "react-icons/gi";
 import "../tradingComponent/ogTrading.css";
-import { MdMilitaryTech } from "react-icons/md";
+import { MdCached } from "react-icons/md";
 import { GiWoodPile, GiBrickWall, GiSheep, GiWheat, GiAnvil, GiSpinningWheel } from 'react-icons/gi';
-import { FaBroom, FaCheckCircle, FaPlusCircle, FaTimesCircle } from "react-icons/fa";
+import { FaBroom, FaCheckCircle, FaCoins, FaExchangeAlt, FaTimesCircle } from "react-icons/fa";
 
 const resourceTypes = ["wood", "bricks", "livestock", "wheat", "ore", "textiles"];
 
@@ -27,9 +26,9 @@ const resourceLabels = {
   livestock: "牲畜"
 };
 
-const TrainArmy = () => {
+const GoldExchange = () => {
   const { selectedOG } = useOG();
-  const [armyAmount, setArmyAmount] = useState(0);
+  const [goldChanges, setGoldChanges] = useState(0);
   const [resourcesChanges, setResourcesChanges] = useState(
     resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {})
   );
@@ -56,24 +55,24 @@ const TrainArmy = () => {
   };
 
   const handleSubmit = async () => {
-    if (!selectedOG || armyAmount <= 0) {
-      alert("请选择一个 OG 以及军队的数量！");
+    if (!selectedOG || goldChanges === 0) {
+      alert("请选择一个 OG 以及金币变化的数量！");
       return;
     }
 
     try {
-      await axiosInstance.put("/npcpr/ogtrain", {
+      await axiosInstance.put("/npcpr/goldexchg", {
         ogID: selectedOG,
-        armyAmount,
         resourcesChanges,
+        goldChanges,
       });
 
-      alert("成功训练军队！");
-      setArmyAmount(0);
+      alert("成功兑换金币与资源！");
+      setGoldChanges(0);
       setResourcesChanges(resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {}));
     } catch (err) {
       console.error(err);
-      alert("军队训练失败: " + (err.response?.data?.message || err.message));
+      alert("金币与资源兑换失败: " + (err.response?.data?.message || err.message));
     } finally {
       setShowConfirm(false);
     }
@@ -82,24 +81,35 @@ const TrainArmy = () => {
   return (
     <div className="og-trading-container train-army-container">
       <h2 className="og-trading-medieval-title">
-        <GiShield className="medieval-icon" /> 训练军队
+        <FaExchangeAlt className="medieval-icon" /> 兑换金币与资源
       </h2>
 
       {/* Army Amount Slider */}
       <div className="og-trading-slider-row army-amount-row">
         <label className="train-army-label">
           <span className="train-army-name">
-            <MdMilitaryTech/> 军队数量: <span className="train-army-value">{armyAmount}</span>
+            <FaCoins/> 金币: <span className="train-army-value">{goldChanges}</span>
           </span>
         </label>
         <input
           type="range"
-          min="0"
+          min="-10"
           max="10"
-          value={armyAmount}
-          onChange={(e) => setArmyAmount(parseInt(e.target.value, 10))}
+          value={goldChanges}
+          onChange={(e) => setGoldChanges(parseInt(e.target.value, 10))}
           className="train-army-amount-slider"
-          style={{ '--percent': `${armyAmount * 10}%` }}
+          style={{
+            background: `linear-gradient(
+                to right,
+                ${
+                    goldChanges < 0
+                    ? `#e8d8c3 0%, #e8d8c3 ${50 + (goldChanges / 10) * 50}%, rgb(167, 51, 51) ${50 + (goldChanges / 10) * 50}%,rgb(167, 51, 51) 50%, #e8d8c3 50%, #e8d8c3 100%`
+                    : goldChanges > 0
+                    ? `#e8d8c3 0%, #e8d8c3 50%, rgb(58, 131, 45) 50%,rgb(58, 131, 45) ${50 + (goldChanges / 10) * 50}%, #e8d8c3 ${50 + (goldChanges / 10) * 50}%, #e8d8c3 100%`
+                    : `#e8d8c3 0%, #e8d8c3 100%`
+                }
+            )`
+          }}
         />
       </div>
 
@@ -117,12 +127,23 @@ const TrainArmy = () => {
               </label>
               <input
                 type="range"
-                min="0"
+                min="-50"
                 max="50"
                 value={value}
                 className="og-trading-medieval-slider"
                 onChange={(e) => handleResourceChange(resource, e.target.value)}
-                style={{ '--percent': `${(value / 50) * 100}%` }}
+                style={{
+                    background: `linear-gradient(
+                        to right,
+                        ${
+                            value < 0
+                            ? `#e8d8c3 0%, #e8d8c3 ${50 + (value / 50) * 50}%, rgb(167, 51, 51) ${50 + (value / 50) * 50}%,rgb(167, 51, 51) 50%, #e8d8c3 50%, #e8d8c3 100%`
+                            : value > 0
+                            ? `#e8d8c3 0%, #e8d8c3 50%, rgb(58, 131, 45) 50%,rgb(58, 131, 45) ${50 + (value / 50) * 50}%, #e8d8c3 ${50 + (value / 50) * 50}%, #e8d8c3 100%`
+                            : `#e8d8c3 0%, #e8d8c3 100%`
+                        }
+                    )`
+                }}
               />
             </div>
           );
@@ -134,16 +155,16 @@ const TrainArmy = () => {
           onClick={() => setShowConfirm(true)}
           className="og-trading-medieval-btn"
           disabled={
-            armyAmount <= 0 ||
+            goldChanges === 0 ||
             !selectedOG ||
             Object.values(resourcesChanges).every((v) => v === 0)
           }
         >
-          <FaPlusCircle className="og-trading-medieval-btn-icon" /> 训练
+          <MdCached className="og-trading-medieval-btn-icon" /> 兑换
         </button>
         <button
           onClick={() => {
-            setArmyAmount(0);
+            setGoldChanges(0);
             setResourcesChanges(resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {}));
           }}
           className="og-trading-medieval-btn cancel"
@@ -159,7 +180,7 @@ const TrainArmy = () => {
             <h3>确认操作</h3>
             <p>
               您确定要为 <strong>{ogOptions.find(og => og.id === selectedOG)?.name || `OG ${selectedOG}`}</strong>{" "}
-              训练 <strong>{armyAmount}</strong>{" "} 支军队吗？
+              进行金币与资源的兑换吗？
             </p>
             <div className="use-effect-modal-buttons">
               <button className="og-trading-medieval-btn" onClick={handleSubmit}>
@@ -179,4 +200,4 @@ const TrainArmy = () => {
   );
 };
 
-export default TrainArmy;
+export default GoldExchange;

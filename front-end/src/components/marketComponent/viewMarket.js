@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import axiosInstance from '../../api/axiosInstance.js';
-import "./ogResArmInfo.css";
+import "../ogResArmComponent/ogResArmInfo.css";
 import MedievalSpinner from "../loadingComponent/spinner.js";
 
 import {
     GiWheat, GiAnvil, GiSheep, GiBrickWall, GiWoodPile, GiSpinningWheel
 } from "react-icons/gi";
+import { FaCoins } from "react-icons/fa";
 
 const getIcon = (type) => {
     const icons = {
@@ -28,14 +29,14 @@ const resourceLabels = {
     livestock: "牲畜",
 };
 
-const FreelandInfo = () => {
-    const [freeland, setFreeland] = useState(null);
+const MarketRatesInfo = () => {
+    const [marketRates, setMarketRates] = useState(null);
     const prevValues = useRef({});
     const valueRefs = useRef({});
 
-    const fetchFreeland = async () => {
+    const fetchMarketRates = async () => {
         try {
-            const res = await axiosInstance.get("/allpr/allfreeland");
+            const res = await axiosInstance.get("/allpr/market");
             const newData = res.data.data;
 
             Object.entries(newData).forEach(([key, newValue]) => {
@@ -50,40 +51,48 @@ const FreelandInfo = () => {
                 prevValues.current[key] = newValue;
             });
 
-            setFreeland(newData);
+            setMarketRates(newData);
         } catch (err) {
-            console.error("无法读取场上持有的个资源总数：", err);
+            console.error("无法读取市场兑换率：", err);
         }
     };
 
     useEffect(() => {
-        fetchFreeland();
-        const poll = setInterval(fetchFreeland, 5000);
+        fetchMarketRates();
+        const poll = setInterval(fetchMarketRates, 5000);
         return () => clearInterval(poll);
     }, []);
 
-    if (!freeland) return <MedievalSpinner />;
+    if (!marketRates) return <MedievalSpinner />;
 
     return (
         <div className="res-container fancy-dashboard">
-            <h2 className="res-header">所剩未开发产地数量</h2>
+            <h2 className="res-header">市场兑换率</h2>
             <div className="res-grid">
-                {Object.entries(freeland).map(([key, value]) => (
+                {Object.entries(marketRates).map(([key, value]) => (
                     <div className="res-card" key={key}>
-                        {getIcon(key)}
-                        <div className="res-label">{resourceLabels[key] || key}</div>
-                        <div
-                            className="res-value"
-                            ref={el => (valueRefs.current[key] = el)}
-                            id={`total-res-value-${key}`}
-                        >
-                            {value}
+                        <div className="res-card-split">
+                            <div className="res-side">
+                                <div
+                                    className="res-value"
+                                    ref={el => (valueRefs.current[key] = el)}
+                                >
+                                    {value}
+                                </div>
+                                <FaCoins className="res-icon gold-icon" />
+                            </div>
+                            <div className="res-side">
+                                <div className="res-value">5</div>
+                                {getIcon(key)}
+                            </div>
+                            <div className="res-label">金币兑{resourceLabels[key]}</div>
                         </div>
                     </div>
+
                 ))}
             </div>
         </div>
     );
 };
 
-export default FreelandInfo;
+export default MarketRatesInfo;

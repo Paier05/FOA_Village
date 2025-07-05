@@ -1,28 +1,17 @@
 import { useEffect, useState } from "react";
 import axiosInstance from '../../api/axiosInstance.js';
 
-const PHASE_DURATIONS = {
-  "1st 发展期": 45 * 60,
-  "1st 战争期": 5 * 60,
-  "2nd 发展期": 45 * 60,
-  "2nd 战争期": 5 * 60,
-  "3rd 发展期": 45 * 60,
-  "3rd 战争期": 5 * 60,
-};
-
 export const useGameTimer = () => {
     const [phase, setPhase] = useState(null);
     const [timeLeft, setTimeLeft] = useState(0);
 
     const fetchPhase = async () => {
         const res = await axiosInstance.get("/allpr/gamephase");
-        const { phase, starttime } = res.data.data;
-        const duration = PHASE_DURATIONS[phase];
-        const [h, m, s] = starttime.split(":").map((x) => parseInt(x));
+        const { phase, endtime } = res.data.data;
+        const [h, m, s] = endtime.split(":").map((x) => parseInt(x));
         const now = new Date();
-        const startUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), h, m, s);
-        const elapsed = Math.floor((Date.now() - startUTC) / 1000);
-        const remaining = Math.max(0, duration - elapsed);
+        const endUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), h, m, s);
+        const remaining = Math.max(0, Math.floor((endUTC - Date.now()) / 1000));
         setPhase(phase);
         setTimeLeft(remaining);
     };

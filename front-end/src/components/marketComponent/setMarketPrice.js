@@ -1,76 +1,78 @@
 import React, { useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import "../tradingComponent/ogTrading.css";
-import { FaBroom, FaCheckCircle, FaEdit, FaTimesCircle } from "react-icons/fa";
-import { GiWoodPile, GiBrickWall, GiSheep, GiWheat, GiAnvil, GiSpinningWheel, GiSpade } from "react-icons/gi";
+import { FaBroom, FaCheckCircle, FaEdit, FaTimesCircle, FaCoins, FaBalanceScale } from "react-icons/fa";
+import {
+  GiWoodPile, GiBrickWall, GiSheep, GiWheat, GiAnvil, GiSpinningWheel
+} from "react-icons/gi";
 
 const resourceIcons = {
-    wood: <GiWoodPile />,
-    bricks: <GiBrickWall />,
-    livestock: <GiSheep />,
-    wheat: <GiWheat />,
-    ore: <GiAnvil />,
-    textiles: <GiSpinningWheel />
+  wood: <GiWoodPile />,
+  bricks: <GiBrickWall />,
+  livestock: <GiSheep />,
+  wheat: <GiWheat />,
+  ore: <GiAnvil />,
+  textiles: <GiSpinningWheel />
 };
 
 const resourceLabels = {
-    wood: "木头产地",
-    bricks: "砖块产地",
-    textiles: "纺织品产地",
-    wheat: "稻米产地",
-    ore: "矿石产地",
-    livestock: "牲畜产地",
+  wood: "木头",
+  bricks: "砖块",
+  textiles: "纺织品",
+  wheat: "稻米",
+  ore: "矿石",
+  livestock: "牲畜",
 };
 
 const resourceTypes = Object.keys(resourceIcons);
 
-const ForceSetFreeland = () => {
-    const [freelandChanges, setFreelandChanges] = useState(
+const SetMarket = () => {
+    const [marketChanges, setMarketChanges] = useState(
         resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {})
     );
     const [showConfirm, setShowConfirm] = useState(false);
 
-    const handleSliderChange = (land, value) => {
-        setFreelandChanges(prev => ({
+    const handleSliderChange = (res, value) => {
+        setMarketChanges(prev => ({
             ...prev,
-            [land]: parseInt(value, 10)
+            [res]: parseInt(value, 10)
         }));
     };
 
     const handleSubmit = async () => {
         try {
-            await axiosInstance.put("/apr/forceset/freeland", {
-                freelandChanges
+            await axiosInstance.put("/npcpr/market", {
+                marketChanges
             });
-            alert("未开发的产地数量修改成功！");
+            alert("市场兑换率修改成功！");
             handleClear();
         } catch (err) {
             console.error(err);
-            alert("未开发的产地数量修改失败: " + (err.response?.data?.message || err.message));
+            alert("市场兑换率修改失败: " + (err.response?.data?.message || err.message));
         } finally {
             setShowConfirm(false);
         }
     };
 
     const handleClear = () => {
-        setFreelandChanges(resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {}));
+        setMarketChanges(resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {}));
     };
 
     return (
         <div className="og-trading-container medieval-bg">
         <h2 className="og-trading-medieval-title">
-            <GiSpade className="medieval-icon" /> 未开发产地数修改
+            <FaBalanceScale className="medieval-icon" /> 市场兑换率调整
         </h2>
 
-        {/* Resource Sliders */}
+        {/* Sliders */}
         <div className="og-trading-sliders">
             {resourceTypes.map(resource => {
-            const value = freelandChanges[resource];
+            const value = marketChanges[resource];
             return (
                 <div key={resource} className="og-trading-slider-row">
                 <label className="og-trading-medieval-label">
-                    {resourceIcons[resource]} {resourceLabels[resource]} :{" "}
-                    <span className="og-trading-resource-val">{value}</span>
+                    5 {resourceLabels[resource]} = <FaCoins /> ：
+                    <span className="og-trading-resource-val">{value >= 0 ? `+${value}` : value}</span>
                 </label>
                 <input
                     type="range"
@@ -80,16 +82,16 @@ const ForceSetFreeland = () => {
                     className="og-trading-medieval-slider"
                     onChange={e => handleSliderChange(resource, e.target.value)}
                     style={{
-                        background: `linear-gradient(
-                            to right,
-                            ${
-                                value < 0
-                                ? `#e8d8c3 0%, #e8d8c3 ${50 + (value / 5) * 50}%, rgb(167, 51, 51) ${50 + (value / 5) * 50}%,rgb(167, 51, 51) 50%, #e8d8c3 50%, #e8d8c3 100%`
-                                : value > 0
-                                ? `#e8d8c3 0%, #e8d8c3 50%, rgb(58, 131, 45) 50%,rgb(58, 131, 45) ${50 + (value / 5) * 50}%, #e8d8c3 ${50 + (value / 5) * 50}%, #e8d8c3 100%`
-                                : `#e8d8c3 0%, #e8d8c3 100%`
-                            }
-                        )`
+                    background: `linear-gradient(
+                        to right,
+                        ${
+                        value < 0
+                            ? `#e8d8c3 0%, #e8d8c3 ${50 + (value / 5) * 50}%, rgb(167, 51, 51) ${50 + (value / 5) * 50}%,rgb(167, 51, 51) 50%, #e8d8c3 50%, #e8d8c3 100%`
+                            : value > 0
+                            ? `#e8d8c3 0%, #e8d8c3 50%, rgb(58, 131, 45) 50%,rgb(58, 131, 45) ${50 + (value / 5) * 50}%, #e8d8c3 ${50 + (value / 5) * 50}%, #e8d8c3 100%`
+                            : `#e8d8c3 0%, #e8d8c3 100%`
+                        }
+                    )`
                     }}
                 />
                 </div>
@@ -102,7 +104,7 @@ const ForceSetFreeland = () => {
             <button
             className="og-trading-medieval-btn"
             onClick={() => setShowConfirm(true)}
-            disabled={Object.values(freelandChanges).every((v) => v === 0)}
+            disabled={Object.values(marketChanges).every(v => v === 0)}
             >
             <FaEdit className="og-trading-medieval-btn-icon" /> 修改
             </button>
@@ -111,15 +113,16 @@ const ForceSetFreeland = () => {
             </button>
         </div>
 
+        {/* Confirm Modal */}
         {showConfirm && (
             <div className="use-effect-modal-overlay">
             <div className="use-effect-modal">
                 <h3>确认操作</h3>
                 <p>
-                确定要修改未开发产地数量吗？
+                确定要调整市场兑换率吗？
                 </p>
                 <div className="use-effect-modal-buttons">
-                <button className="og-trading-medieval-btn" onClick={() => { handleSubmit(); setShowConfirm(false); }}>
+                <button className="og-trading-medieval-btn" onClick={handleSubmit}>
                     <FaCheckCircle className="og-trading-medieval-btn-icon" /> 确认
                 </button>
                 <button className="og-trading-medieval-btn cancel" onClick={() => setShowConfirm(false)}>
@@ -134,4 +137,4 @@ const ForceSetFreeland = () => {
     );
 };
 
-export default ForceSetFreeland;
+export default SetMarket;

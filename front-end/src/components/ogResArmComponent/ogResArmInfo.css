@@ -95,3 +95,50 @@
   0% {opacity: 0; transform: translateY(20px);}
   100% {opacity: 1; transform: translateY(0);}
 }
+
+.plus-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+/* Overlay smaller + icon neatly */
+.plus-overlay {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  font-size: 0.8rem;
+  color: #2e7d32;
+  background: #fff8e1;
+  border-radius: 50%;
+  padding: 1px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+}
+
+.res-trade-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.res-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* ← increase gap here */
+}
+
+.res-card-split {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.res-side {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}

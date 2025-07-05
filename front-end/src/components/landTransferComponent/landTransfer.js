@@ -75,11 +75,6 @@ const LandTransfer = () => {
       return;
     }
 
-    if (Object.values(landChanges).every((v) => v === 0)) {
-      alert("请至少转移一种产地资源。");
-      return;
-    }
-
     try {
       await axiosInstance.put("/npcpr/oglndtrf", {
         winnerID,

@@ -16,6 +16,8 @@
   background: var(--medieval-brown);
   border: 6px solid var(--medieval-border);
   box-shadow: 0 0 15px rgba(139, 94, 60, 0.5);
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Title */
@@ -28,23 +30,47 @@
   margin-bottom: 1rem;
 }
 
+/* Table wrapper for responsiveness */
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
 /* Table */
 .admin-user-table {
   width: 100%;
-  max-width: 1000px;
   border-collapse: collapse;
-  margin: 0 auto;
   font-family: 'Noto Serif SC', 'KaiTi', 'STKaiti', 'SimSun', 'PMingLiU', serif;
   background-color: #f8f2e3;
   color: #3c2c1a;
   border: 3px solid var(--medieval-border);
+  table-layout: fixed; /* make cells fit */
+  word-wrap: break-word;
 }
 
 .admin-user-table th,
 .admin-user-table td {
   padding: 12px;
-  border: 1px solid #d3b58f;
   text-align: center;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .admin-user-table th,
+  .admin-user-table td {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-user-table th,
+  .admin-user-table td {
+    font-size: 0.7rem;
+    padding: 4px;
+  }
 }
 
 .admin-user-table th {
@@ -75,6 +101,22 @@ td[style] {
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s;
   color: white;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .action-btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .action-btn {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
 }
 
 .action-btn:hover {
@@ -198,4 +240,16 @@ td[style] {
 
 .admin-confirm-button-icon {
   transform: translateY(2px);
+}
+
+@media (max-width: 768px) {
+  .admin-user-table th,
+  .admin-user-table td {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+
+  .og-trading-container {
+    padding: 1rem;
+  }
 }

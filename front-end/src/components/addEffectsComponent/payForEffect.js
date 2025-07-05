@@ -2,43 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { useOG } from "../ogSelectionComponent/ogContext.js";
 import axiosInstance from "../../api/axiosInstance.js";
 import "../tradingComponent/ogTrading.css";
-import {
-  GiWoodPile, GiBrickWall, GiSheep, GiWheat, GiAnvil, GiSpinningWheel, GiSparkles
-} from "react-icons/gi";
-import { FaBroom, FaCheckCircle, FaCoins, FaTimesCircle } from "react-icons/fa";
-
-const resourceTypes = ["wood", "bricks", "livestock", "wheat", "ore", "textiles"];
-
-const resourceIcons = {
-  wood: <GiWoodPile />,
-  bricks: <GiBrickWall />,
-  livestock: <GiSheep />,
-  wheat: <GiWheat />,
-  ore: <GiAnvil />,
-  textiles: <GiSpinningWheel />
-};
-
-const resourceLabels = {
-  wood: "木头",
-  bricks: "砖块",
-  textiles: "纺织品",
-  wheat: "稻米",
-  ore: "矿石",
-  livestock: "牲畜"
-};
+import { 
+  FaBroom, FaCheckCircle, FaCoins, FaTimesCircle 
+} from "react-icons/fa";
+import { GiSparkles } from "react-icons/gi";
 
 const effectOptions = [
   "釜底抽薪", "釜底抽薪+", "天道酬勤", "天道酬勤+",
-  "梅林的魔法", "防御工事", "石中剑", "知己知彼",
-  "兵不厌诈", "兵不厌诈+", "抛砖引玉", "十面埋伏", "十面埋伏+"
+  "梅林的魔法", "防御工事", "知己知彼",
+  "兵不厌诈", "抛砖引玉", "十面埋伏"
 ];
 
 const PayForEffect = () => {
   const { selectedOG } = useOG();
   const [effect, setEffect] = useState("");
-  const [resourcesChanges, setResourcesChanges] = useState(
-    resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {})
-  );
+  const [goldAmount, setGoldAmount] = useState(0);
   const [targetOG, setTargetOG] = useState("");
   const [type, setType] = useState("");
   const [ogOptions, setOgOptions] = useState([]);
@@ -74,13 +52,8 @@ const PayForEffect = () => {
     }
   }, [effect]);
 
-  const handleSliderChange = (resource, value) => {
-    setResourcesChanges(prev => ({ ...prev, [resource]: parseInt(value, 10) }));
-  };
-
   const handleSubmit = async () => {
     if (!selectedOG || !effect) return alert("请选择一个OG和特殊技能");
-    if (!Object.values(resourcesChanges).some(v => v > 0)) return alert("请至少分配一种资源");
 
     try {
       await axiosInstance.post("/npcpr/ogeffadd", {
@@ -88,7 +61,7 @@ const PayForEffect = () => {
         effect,
         targetID: targetOG,
         type,
-        resourcesChanges
+        goldAmount, // send goldAmount instead of resourcesChanges
       });
       alert("特殊技能支付成功！");
       handleClear();
@@ -103,7 +76,7 @@ const PayForEffect = () => {
     setEffect("");
     setTargetOG("");
     setType("");
-    setResourcesChanges(resourceTypes.reduce((acc, res) => ({ ...acc, [res]: 0 }), {}));
+    setGoldAmount(0);
   };
 
   const scrollEffectUp = () => {
@@ -124,16 +97,6 @@ const PayForEffect = () => {
   const scrollTargetOGDown = () => {
     const i = ogOptions.findIndex(og => og.id === targetOG);
     setTargetOG(ogOptions[(i + 1) % ogOptions.length]?.id);
-  };
-
-  const scrollTypeUp = () => {
-    const i = resourceTypes.findIndex(r => r === type);
-    setType(resourceTypes[(i <= 0 ? resourceTypes.length : i) - 1]);
-  };
-
-  const scrollTypeDown = () => {
-    const i = resourceTypes.findIndex(r => r === type);
-    setType(resourceTypes[(i + 1) % resourceTypes.length]);
   };
 
   return (
@@ -185,50 +148,22 @@ const PayForEffect = () => {
         </div>
       )}
 
-      {/* Conditional target resource selector */}
-      {["釜底抽薪", "釜底抽薪+", "梅林的魔法"].includes(effect) && (
-        <div className="all-og-selector-container">
-          <h3>指定资源</h3>
-          <div className="all-og-scroll-controls">
-            <button className="all-scroll-arrow" onClick={scrollTypeUp}>▲</button>
-            <div className="all-og-scroll-list">
-              {resourceTypes.map(res => (
-                <div
-                  key={res}
-                  className={`all-og-item ${type === res ? "selected" : ""}`}
-                  onClick={() => setType(res)}
-                >
-                  {resourceLabels[res] || res}
-                </div>
-              ))}
-            </div>
-            <button className="all-scroll-arrow" onClick={scrollTypeDown}>▼</button>
-          </div>
+      {/* Gold Slider */}
+      <div className="og-trading-sliders" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+        <div className="og-trading-slider-row">
+          <label className="og-trading-medieval-label">
+            <FaCoins /> 金币: <span className="og-trading-resource-val">{goldAmount}</span>
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            value={goldAmount}
+            className="og-trading-medieval-slider"
+            onChange={e => setGoldAmount(parseInt(e.target.value, 10))}
+            style={{ '--percent': `${(goldAmount / 10) * 100}%` }}
+          />
         </div>
-      )}
-
-      {/* Resource Cost Sliders */}
-      <div className="og-trading-sliders">
-        {resourceTypes.map(resource => {
-          const value = resourcesChanges[resource];
-          return (
-            <div key={resource} className="og-trading-slider-row">
-              <label className="og-trading-medieval-label">
-                {resourceIcons[resource]} {resourceLabels[resource]}:{" "}
-                <span className="og-trading-resource-val">{value}</span>
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="50"
-                value={value}
-                className="og-trading-medieval-slider"
-                onChange={e => handleSliderChange(resource, e.target.value)}
-                style={{ '--percent': `${(value / 50) * 100}%` }}
-              />
-            </div>
-          );
-        })}
       </div>
 
       {/* Buttons */}
@@ -236,7 +171,7 @@ const PayForEffect = () => {
         <button
           onClick={() => setShowConfirm(true)}
           className="og-trading-medieval-btn"
-          disabled={!selectedOG || !effect || Object.values(resourcesChanges).every((v) => v === 0)}
+          disabled={!selectedOG || !effect || goldAmount === 0}
         >
           <FaCoins className="og-trading-medieval-btn-icon" /> 支付
         </button>
@@ -264,7 +199,6 @@ const PayForEffect = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
