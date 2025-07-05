@@ -99,7 +99,8 @@ react-icons
 axios
 react-scripts
 web-vitals
-react-wheel-of-prizes
+react-wheel-of-prizes --legacy-peer-deps
+react-custom-roulette --legacy-peer-deps
 
 Add ( --legacy-peer-deps) behind if there is react versions conflict
 Example: npm install react-wheel-of-prizes --legacy-peer-deps
