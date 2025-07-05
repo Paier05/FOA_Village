@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FiMenu, FiChevronLeft, FiHome, FiUsers, FiLogOut, FiRepeat, FiZap, FiMap, FiClock } from 'react-icons/fi';
+import { FiMenu, FiChevronLeft, FiHome, FiUsers, FiLogOut, FiRepeat, FiZap, FiMap, FiClock, FiUserPlus } from 'react-icons/fi';
 import './sidebars.css';
 import axiosInstance from '../api/axiosInstance';
 import { MdMilitaryTech, MdWarning } from 'react-icons/md';
@@ -38,6 +38,10 @@ const AdminSidebar = () => {
                     <NavLink to="/admin/home" className="sidebar-link">
                         <FiHome className="sidebar-icon" />
                         {!collapsed && '主页'}
+                    </NavLink>
+                    <NavLink to="/admin/register" className="sidebar-link">
+                        <FiUserPlus className="sidebar-icon" />
+                        {!collapsed && '注册账号'}
                     </NavLink>
                     <hr className="sidebar-divider" />
                     <NavLink to="/admin/accounts" className="sidebar-link">
