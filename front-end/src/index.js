@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import LoginPage from './pages/authPages/loginPage.js';
-import RegisterPage from './pages/authPages/registerPage.js';
 import OGHomePage from './pages/ogPages/ogHomePage.js';
 import OGResourcesPage from './pages/ogPages/ogResourcesPage.js';
 import OGTradePage from './pages/ogPages/ogTradePage.js';
@@ -41,6 +40,7 @@ import AdminGoldExchangePage from './pages/adminPages/adminGoldExchangePage.js';
 import NPCSetMarketPage from './pages/npcPages/npcSetMarketPage.js';
 import AdminSetMarketPage from './pages/adminPages/adminSetMarketPage.js';
 import OGGameRulesPage from './pages/ogPages/ogGameRulesPage.js';
+import AdminRegisterPage from './pages/adminPages/adminRegisterPage.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -48,10 +48,6 @@ root.render(
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/admin-home" element={<AdminHomePage />} />
-      <Route path="/npc-home" element={<NPCHomePage />} />
-      <Route path="/mod-home" element={<ModeratorHomePage />} />
 
       <Route
         path="/og/*"
@@ -105,6 +101,7 @@ root.render(
           <DashboardLayout Sidebar={AdminSidebar}>
             <Routes>
               <Route path="home" element={<AdminHomePage />} />
+              <Route path="register" element={<AdminRegisterPage />} />
               <Route path="accounts" element={<AdminAccountsPage />} />
               <Route path="useeff" element={<AdminUseEffectPage />} />
               <Route path="gamephase" element={<AdminTimerPage />} />
