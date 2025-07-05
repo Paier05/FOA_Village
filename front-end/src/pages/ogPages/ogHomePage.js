@@ -5,6 +5,7 @@ import Leaderboard from "../../components/leaderboardComponent/leaderboard.js";
 import "../authPages/authPage.css";
 import FreelandInfo from "../../components/ogResArmComponent/allFreeLand.js";
 import EventDisplay from "../../components/eventsComponent/eventDisplay.js";
+import MarketRatesInfo from "../../components/marketComponent/viewMarket.js";
 
 const OGHomePage = () => {
   return (
@@ -14,6 +15,7 @@ const OGHomePage = () => {
       <EventDisplay />
       <AllResSumInfo />
       <FreelandInfo />
+      <MarketRatesInfo />
     </div>
   );
 };

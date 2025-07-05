@@ -4,6 +4,7 @@ import OGSelector from "../../components/ogSelectionComponent/ogSelection.js";
 import OGResInfo from "../../components/ogResArmComponent/modViewOGRes.js";
 import OGResourceAddition from "../../components/modAddResComponent/addOGRes.js";
 import "../authPages/authPage.css";
+import OGSpinWheel from "../../components/wheelComponent/wheel.js";
 
 const ModeratorPrizePage = () => {
   return (
@@ -11,6 +12,7 @@ const ModeratorPrizePage = () => {
       <OGProvider>
         <OGSelector />
         <OGResInfo />
+        <OGSpinWheel />
         <OGResourceAddition />
       </OGProvider>
     </div>
