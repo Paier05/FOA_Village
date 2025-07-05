@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.js';
-import { useNavigate } from 'react-router-dom';
 import './authComponent.css';
 
 const Register = () => {
@@ -10,7 +9,6 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [error, setError] = useState('');
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,7 +26,6 @@ const Register = () => {
                 { username, password }
             );
             alert('成功注册账号！');
-            navigate('/login');
         } catch (err) {
             setError(err.response?.data?.error || '账号注册失败！');
         }
