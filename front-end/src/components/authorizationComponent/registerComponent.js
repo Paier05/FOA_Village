@@ -26,6 +26,10 @@ const Register = () => {
                 { username, password }
             );
             alert('成功注册账号！');
+            setUsername('');
+            setPassword('');
+            setConfirmPassword('');
+            setError('');
         } catch (err) {
             setError(err.response?.data?.error || '账号注册失败！');
         }
