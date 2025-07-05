@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.js';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import "./authComponent.css"
 
 const Login = () => {
@@ -82,10 +82,6 @@ const Login = () => {
                 </div>
 
                 <button type="submit" className="login-submit-btn">登入</button>
-
-                <p className="register-link">
-                    未注册账号？ <Link to="/register">点击这里注册！</Link>
-                </p>
             </form>
         </div>
     );

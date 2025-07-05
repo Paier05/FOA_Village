@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.js';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './authComponent.css';
 
 const Register = () => {
@@ -24,7 +24,7 @@ const Register = () => {
 
         try {
             await axiosInstance.post(
-                '/auth/register',
+                '/apr/accounts/register',
                 { username, password }
             );
             alert('成功注册账号！');
@@ -95,9 +95,6 @@ const Register = () => {
 
                 <button type="submit" className="login-submit-btn">注册</button>
 
-                <p className="register-link">
-                    已经持有账号？ <Link to="/login">点击这里登入！</Link>
-                </p>
             </form>
         </div>
     );
