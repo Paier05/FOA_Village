@@ -1,4 +1,5 @@
 import React from 'react';
+import "./index.css"
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -33,6 +34,13 @@ import AdminSetLandPage from './pages/adminPages/adminSetLandPage.js';
 import AdminSetFreelandPage from './pages/adminPages/adminSetFreelandPage.js';
 import AdminSetResourcesPage from './pages/adminPages/adminSetResPage.js';
 import AdminSetEffectsConstraintsPage from './pages/adminPages/adminSetConstraintsPage.js';
+import AdminTimerPage from './pages/adminPages/adminTimerPage.js';
+import AdminEventPage from './pages/adminPages/adminEventPage.js';
+import NPCGoldExchangePage from './pages/npcPages/npcGoldExchangePage.js';
+import AdminGoldExchangePage from './pages/adminPages/adminGoldExchangePage.js';
+import NPCSetMarketPage from './pages/npcPages/npcSetMarketPage.js';
+import AdminSetMarketPage from './pages/adminPages/adminSetMarketPage.js';
+import OGGameRulesPage from './pages/ogPages/ogGameRulesPage.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -53,6 +61,7 @@ root.render(
               <Route path="home" element={<OGHomePage />} />
               <Route path="resources" element={<OGResourcesPage />} />
               <Route path="trade" element={<OGTradePage />} />
+              <Route path="gamerule" element={<OGGameRulesPage />} />
             </Routes>
           </DashboardLayout>
         }
@@ -83,6 +92,8 @@ root.render(
               <Route path="devland" element={<NPCDevelopLandPage />} />
               <Route path="battleoc" element={<NPCBattleOutcomePage />} />
               <Route path="trainarmy" element={<NPCTrainArmyPage />} />
+              <Route path="goldexchg" element={<NPCGoldExchangePage />} />
+              <Route path="marketrate" element={<NPCSetMarketPage />} />
             </Routes>
           </DashboardLayout>
         }
@@ -96,12 +107,16 @@ root.render(
               <Route path="home" element={<AdminHomePage />} />
               <Route path="accounts" element={<AdminAccountsPage />} />
               <Route path="useeff" element={<AdminUseEffectPage />} />
+              <Route path="gamephase" element={<AdminTimerPage />} />
+              <Route path="events" element={<AdminEventPage />} />
+              <Route path="goldexchg" element={<AdminGoldExchangePage />} />
               <Route path="force/addeff" element={<AdminAddEffectPage />} />
               <Route path="force/setarmy" element={<AdminSetArmyPage />} />
               <Route path="force/setland" element={<AdminSetLandPage />} />
               <Route path="force/setfreeland" element={<AdminSetFreelandPage />} />
               <Route path="force/setogres" element={<AdminSetResourcesPage />} />
               <Route path="force/effcons" element={<AdminSetEffectsConstraintsPage />} />
+              <Route path="marketrate" element={<AdminSetMarketPage />} />
             </Routes>
           </DashboardLayout>
         }

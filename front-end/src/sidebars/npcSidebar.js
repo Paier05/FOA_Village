@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
     FiMenu,
@@ -15,6 +15,7 @@ import './sidebars.css';
 import axiosInstance from '../api/axiosInstance';
 import { GiSwordInStone } from 'react-icons/gi';
 import { MdMilitaryTech } from 'react-icons/md';
+import { FaBalanceScale, FaCoins } from 'react-icons/fa';
 
 const NPCSidebar = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -28,15 +29,6 @@ const NPCSidebar = () => {
             console.error("Logout failed:", err);
         }
     };
-
-    useEffect(() => {
-        const handleResize = () => {
-            setCollapsed(window.innerWidth <= 768);
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const toggleSidebar = () => setCollapsed(prev => !prev);
 
@@ -61,6 +53,14 @@ const NPCSidebar = () => {
                     <NavLink to="/npc/oginfo" className="sidebar-link">
                         <FiInfo className="sidebar-icon" />
                         {!collapsed && 'OG 资讯'}
+                    </NavLink>
+                    <NavLink to="/npc/marketrate" className="sidebar-link">
+                        <FaBalanceScale className="sidebar-icon" />
+                        {!collapsed && '市场兑换率'}
+                    </NavLink>
+                    <NavLink to="/npc/goldexchg" className="sidebar-link">
+                        <FaCoins className="sidebar-icon" />
+                        {!collapsed && '金币兑换'}
                     </NavLink>
                     <NavLink to="/npc/granteff" className="sidebar-link">
                         <FiZap className="sidebar-icon" />

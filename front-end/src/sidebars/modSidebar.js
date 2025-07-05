@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FiMenu, FiChevronLeft, FiHome, FiLogOut } from 'react-icons/fi';
 import { FaTrophy } from "react-icons/fa";
@@ -17,15 +17,6 @@ const ModSidebar = () => {
             console.error("Logout failed:", err);
         }
     };
-
-    useEffect(() => {
-        const handleResize = () => {
-            setCollapsed(window.innerWidth <= 768);
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const toggleSidebar = () => setCollapsed(prev => !prev);
 

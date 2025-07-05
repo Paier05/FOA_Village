@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FiMenu, FiChevronLeft, FiHome, FiBox, FiRepeat, FiLogOut } from 'react-icons/fi';
+import { FiMenu, FiChevronLeft, FiHome, FiBox, FiRepeat, FiLogOut, FiInfo } from 'react-icons/fi';
 import './sidebars.css';
 import axiosInstance from '../api/axiosInstance';
 
@@ -16,15 +16,6 @@ const OGSidebar = () => {
             console.error("Logout failed:", err);
         }
     };
-
-    useEffect(() => {
-        const handleResize = () => {
-            setCollapsed(window.innerWidth <= 768);
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const toggleSidebar = () => setCollapsed(prev => !prev);
 
@@ -46,6 +37,10 @@ const OGSidebar = () => {
                         {!collapsed && '主页'}
                     </NavLink>
                     <hr className="sidebar-divider" />
+                    <NavLink to="/og/gamerule" className="sidebar-link">
+                        <FiInfo className="sidebar-icon" />
+                        {!collapsed && '游戏规则'}
+                    </NavLink>
                     <NavLink to="/og/resources" className="sidebar-link">
                         <FiBox className="sidebar-icon" />
                         {!collapsed && '库存'}

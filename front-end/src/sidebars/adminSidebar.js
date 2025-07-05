@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FiMenu, FiChevronLeft, FiHome, FiUsers, FiLogOut, FiRepeat, FiZap, FiMap } from 'react-icons/fi';
+import { FiMenu, FiChevronLeft, FiHome, FiUsers, FiLogOut, FiRepeat, FiZap, FiMap, FiClock } from 'react-icons/fi';
 import './sidebars.css';
 import axiosInstance from '../api/axiosInstance';
-import { MdMilitaryTech } from 'react-icons/md';
+import { MdMilitaryTech, MdWarning } from 'react-icons/md';
 import { GiSpade, GiSparkles, GiStoneCrafting } from 'react-icons/gi';
+import { FaBalanceScale, FaCoins } from 'react-icons/fa';
 
 const AdminSidebar = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -18,15 +19,6 @@ const AdminSidebar = () => {
             console.error("Logout failed:", err);
         }
     };
-
-    useEffect(() => {
-        const handleResize = () => {
-            setCollapsed(window.innerWidth <= 768);
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const toggleSidebar = () => setCollapsed(prev => !prev);
 
@@ -51,6 +43,22 @@ const AdminSidebar = () => {
                     <NavLink to="/admin/accounts" className="sidebar-link">
                         <FiUsers className="sidebar-icon" />
                         {!collapsed && '账号管理'}
+                    </NavLink>
+                    <NavLink to="/admin/gamephase" className="sidebar-link">
+                        <FiClock className="sidebar-icon" />
+                        {!collapsed && '游戏阶段'}
+                    </NavLink>
+                    <NavLink to="/admin/events" className="sidebar-link">
+                        <MdWarning className="sidebar-icon" />
+                        {!collapsed && '突发事件'}
+                    </NavLink>
+                    <NavLink to="/admin/marketrate" className="sidebar-link">
+                        <FaBalanceScale className="sidebar-icon" />
+                        {!collapsed && '市场兑换率'}
+                    </NavLink>
+                    <NavLink to="/admin/goldexchg" className="sidebar-link">
+                        <FaCoins className="sidebar-icon" />
+                        {!collapsed && '金币兑换'}
                     </NavLink>
                     <NavLink to="/admin/force/addeff" className="sidebar-link">
                         <FiZap className="sidebar-icon" />
