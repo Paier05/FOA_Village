@@ -4,6 +4,7 @@ const autoExpireInventory = async () => {
     const client = await pool.connect();
     try 
     {
+        await client.query("BEGIN");
         await client.query(`
             UPDATE inventory
             SET status = 0
@@ -11,8 +12,10 @@ const autoExpireInventory = async () => {
               AND expiry < CURRENT_TIME 
               AND status = 1;
         `);
+        await client.query("COMMIT");
     } catch (err) 
     {
+        await client.query("ROLLBACK");
         console.error("[Inventory Expiry Job] Error:", err);
     } finally 
     {

@@ -5,6 +5,13 @@ export const getAllFreelandService = async(client) => {
     return result.rows[0];
 };
 
+export const getAllFreelandForUpdateService = async(client) => {
+    const result = await client.query(
+        "SELECT * FROM freeland FOR UPDATE",
+    );
+    return result.rows[0];
+};
+
 export const updateAllFreelandService = async(client, wood, bricks, livestock, wheat, ore, textiles) => {
     const result = await client.query(
         "UPDATE freeland SET wood = $1, bricks = $2, livestock = $3, wheat = $4, ore = $5, textiles = $6 RETURNING *",
@@ -13,7 +20,7 @@ export const updateAllFreelandService = async(client, wood, bricks, livestock, w
     return result.rows[0];
 };
 
-export const getSpecificFreelandService = async(client, type) => {
+export const getSpecificFreelandForUpdateService = async(client, type) => {
     const result = await client.query(
         `SELECT ${type} FROM freeland FOR UPDATE`,
     );
@@ -27,3 +34,12 @@ export const updateSpecificFreelandService = async(client, type, changes) => {
     );
     return result.rows[0]?.[type];
 };
+
+/*
+export const getSpecificFreelandService = async(client, type) => {
+    const result = await client.query(
+        `SELECT ${type} FROM freeland`,
+    );
+    return result.rows[0]?.[type];
+};
+*/

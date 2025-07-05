@@ -14,14 +14,6 @@ export const userFindByNameService = async(client, name) => {
     return result.rows[0];
 };
 
-export const userGetIDByNameService = async(client, name) => {
-    const result = await client.query(
-        "SELECT id FROM users WHERE name = $1",
-        [name]
-    );
-    return result.rows[0]?.id;
-};
-
 export const userGetNameByIDService = async(client, id) => {
     const result = await client.query(
         "SELECT name FROM users WHERE id = $1",
@@ -74,3 +66,22 @@ export const getAllAccountsService = async(client) => {
     );
     return result.rows;
 };
+
+export const getAccountForUpdateService = async(client, id) => {
+    const result = await client.query(
+        "SELECT name, role, valid FROM users WHERE id = $1",
+        [id]
+    );
+    return result.rows[0];
+};
+
+
+/*
+export const userGetIDByNameService = async(client, name) => {
+    const result = await client.query(
+        "SELECT id FROM users WHERE name = $1",
+        [name]
+    );
+    return result.rows[0]?.id;
+};
+*/

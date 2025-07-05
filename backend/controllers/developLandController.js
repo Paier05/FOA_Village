@@ -1,14 +1,15 @@
 import pool from "../config/db.js";
-import handleResponse from "../middlewares/responseHandler.js";
+import handleResponse, { RES_TRANSLATION } from "../middlewares/responseHandler.js";
 import { 
-    getSpecificFreelandService, 
+    getSpecificFreelandForUpdateService,
     updateSpecificFreelandService 
 } from "../models/freelandTableService.js";
 import { 
+    getOGSpecificLandForUpdateService,
     updateOGSpecificLandService 
 } from "../models/landTableService.js";
 import { 
-    getOGResourcesService,
+    getOGResourcesForUpdateService,
     updateOGResourcesService 
 } from "../models/resourcesTableService.js";
 
@@ -20,22 +21,23 @@ export const developLand = async(req, res) => {
     try 
     {
         await client.query("BEGIN");
-        const currentFreeland = await getSpecificFreelandService(client, landType);
+        const currentFreeland = await getSpecificFreelandForUpdateService(client, landType);
 
         if (currentFreeland === 0)
         {
-            throw new Error(`No more land of ${type} resource can be developed!`);
+            throw new Error(`所有 ${RES_TRANSLATION[landType]} 的产地都已被开发`);
         } else 
         {
+            await getOGSpecificLandForUpdateService(client, ogID, landType);
             await updateOGSpecificLandService(client, ogID, landType, 1);
             await updateSpecificFreelandService(client, landType, -1);
         }
 
-        const currentResources = await getOGResourcesService(client, ogID);   
+        const currentResources = await getOGResourcesForUpdateService(client, ogID);   
 
         if (!currentResources) 
         {
-            throw new Error("Invalid OG ID, unable to pay.");
+            throw new Error("所提供的 OG Id 不存在，无法开发产地！");
         }
 
         for (const [resourceType, changes] of Object.entries(resourcesChanges))
@@ -43,7 +45,7 @@ export const developLand = async(req, res) => {
             // Make Changes
             if (currentResources[resourceType] < changes)
             {
-                throw new Error(`Insufficient resources: ${resourceType}`);
+                throw new Error(`${RES_TRANSLATION[resourceType]} 资源不足！`);
             } else 
             {
                 currentResources[resourceType] -= changes;
@@ -62,11 +64,11 @@ export const developLand = async(req, res) => {
         );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Land developed and paid for successfully!");
+        handleResponse(res, 200, "产地已成功被开发！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to develop land: ${err.message || err}`);
+        handleResponse(res, 400, `产地开发失败：${err.message || err}`);
     } finally
     {
         client.release();

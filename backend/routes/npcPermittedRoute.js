@@ -2,9 +2,6 @@ import express from "express";
 import verifyToken from "../middlewares/authMiddleware.js";
 import authorizeRoles from "../middlewares/roleMiddleware.js";
 import { 
-    ogResourcesDeduction 
-} from "../controllers/addOGResourceController.js";
-import { 
     ogEffectAddition 
 } from "../controllers/effectsController.js";
 import { 
@@ -14,6 +11,7 @@ import {
     developLand 
 } from "../controllers/developLandController.js";
 import { 
+    getOGEffectsConstraints,
     getOGLandOwned 
 } from "../controllers/ogInfoController.js";
 import { 
@@ -29,10 +27,11 @@ import {
     getAvailableUsableOGEffect, 
     useOGEffect 
 } from "../controllers/useEffectController.js";
+import { exchangeOfGoldAndResources } from "../controllers/goldCoinController.js";
+import { updateMarket } from "../controllers/marketController.js";
 
 const router = new express.Router();
 
-router.put("/ogrespay", verifyToken, authorizeRoles("admin", "npc"), ogResourcesDeduction);
 router.post("/ogeffadd", verifyToken, authorizeRoles("admin", "npc"), ogEffectAddition);
 router.get("/oginv/:id", verifyToken, authorizeRoles("admin", "npc"), getOGInventory);
 router.put("/ogdevland", verifyToken, authorizeRoles("admin", "npc"), developLand);
@@ -42,5 +41,8 @@ router.put("/oglndtrf", verifyToken, authorizeRoles("admin", "npc"), landTransfe
 router.put("/ogchglnd", verifyToken, authorizeRoles("admin", "npc"), changeLandProperty);
 router.get("/oguseable-eff/:id", verifyToken, authorizeRoles("admin", "npc"), getAvailableUsableOGEffect);
 router.put("/oguse-eff", verifyToken, authorizeRoles("admin", "npc"), useOGEffect);
+router.get("/ogallcons/:id", verifyToken, authorizeRoles("admin", "npc"), getOGEffectsConstraints);
+router.put("/goldexchg", verifyToken, authorizeRoles("admin", "npc"), exchangeOfGoldAndResources);
+router.put("/market", verifyToken, authorizeRoles("admin", "npc"), updateMarket);
 
 export default router;

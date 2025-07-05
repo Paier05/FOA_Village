@@ -6,6 +6,7 @@ import {
     getAvailableOGs
 } from "../controllers/ogTradeController.js";
 import { 
+    getOGEffectsConstraints,
     getOGLandOwned,
     getOGResArm
 } from "../controllers/ogInfoController.js";
@@ -20,5 +21,6 @@ router.get("/ogresarm", verifyToken, authorizeRoles("admin", "og"), getOGResArm)
 router.get("/available-ogs", verifyToken, authorizeRoles("admin", "og"), getAvailableOGs);
 router.get("/oginv", verifyToken, authorizeRoles("admin", "og"), getOGInventory);
 router.get("/oglands", verifyToken, authorizeRoles("admin", "og"), getOGLandOwned);
+router.get("/ogallcons", verifyToken, authorizeRoles("admin", "og"), getOGEffectsConstraints);
 
 export default router;

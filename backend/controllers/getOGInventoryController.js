@@ -27,8 +27,8 @@ export const getOGInventory = async(req, res) => {
                 expiry: buff.expiry 
                     ? (() => {
                         const today = new Date().toISOString().split("T")[0];
-                        const trimmedTime = buff.expiry.split(".")[0]; // remove microseconds
-                        const utcDateString = `${today}T${trimmedTime}Z`; // treat as UTC
+                        const trimmedTime = buff.expiry.split(".")[0];
+                        const utcDateString = `${today}T${trimmedTime}Z`;
                         const localTime = new Date(utcDateString);
                         return localTime.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit', hour12: true });
                         })()
@@ -57,11 +57,11 @@ export const getOGInventory = async(req, res) => {
             buffs: processedBuffs,
             debuffs: processedDebuffs
         }
-        handleResponse(res, 200, "OG inventory fetched successfully!", inventory);
+        handleResponse(res, 200, "OG 的特效库存已读取成功！", inventory);
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to fetch OG inventory: ${err.message || err}`);
+        handleResponse(res, 400, `OG 的特效库存读取失败：${err.message || err}`);
     } finally
     {
         client.release();

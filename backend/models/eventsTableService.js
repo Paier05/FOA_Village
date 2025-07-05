@@ -12,3 +12,11 @@ export const updateEventService = async(client, event) => {
     );
     return result.rows[0];
 };
+
+export const updateEventTimeService = async(client, time) => {
+    const result = await client.query(
+        "UPDATE events SET expiry = CURRENT_TIME + ($1 || ' minutes')::interval RETURNING *",
+        [time]
+    );
+    return result.rows[0];
+};

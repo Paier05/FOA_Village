@@ -1,25 +1,15 @@
 import pool from "../config/db.js";
-import handleResponse, { RES_TRANSLATION } from "../middlewares/responseHandler.js";
-import { 
-    getOGArmyForUpdateService,
-    updateOGArmyService 
-} from "../models/ogTableService.js";
-import { 
-    getOGResourcesForUpdateService,
-    updateOGResourcesService 
-} from "../models/resourcesTableService.js";
+import handleResponse from "../middlewares/responseHandler.js";
+import { getOGGoldForUpdateService, updateOGGoldService } from "../models/ogTableService.js";
+import { getOGResourcesForUpdateService, updateOGResourcesService } from "../models/resourcesTableService.js";
 
-
-export const trainArmy = async(req, res) => {
-    const { ogID, resourcesChanges, armyAmount } = req.body;
+export const exchangeOfGoldAndResources = async(req, res) => {
+    const { ogID, resourcesChanges, goldChanges } = req.body;
     const client = await pool.connect();
 
     try 
     {
         await client.query("BEGIN");
-        await getOGArmyForUpdateService(client, ogID);
-        await updateOGArmyService(client, ogID, armyAmount);
-
         const currentResources = await getOGResourcesForUpdateService(client, ogID);   
 
         if (!currentResources) 
@@ -27,16 +17,25 @@ export const trainArmy = async(req, res) => {
             throw new Error("所提供的 OG Id 不存在，无法训练军队！");
         }
 
+        const currentGold = await getOGGoldForUpdateService(client, ogID);
+
         for (const [resourceType, changes] of Object.entries(resourcesChanges))
         {
-            // Make Changes
-            if (currentResources[resourceType] < changes)
+            if (changes < 0 && currentResources[resourceType] < -1*changes)
             {
                 throw new Error(` ${RES_TRANSLATION[resourceType]} 资源不足！`);
             } else 
             {
-                currentResources[resourceType] -= changes;
+                currentResources[resourceType] += changes;
             }
+        }
+
+        if (goldChanges < 0 && currentGold < -1*goldChanges)
+        {
+            throw new Error(`金币不足！`);
+        } else 
+        {
+            await updateOGGoldService(client, ogID, goldChanges);
         }
 
         await updateOGResourcesService(
@@ -51,11 +50,11 @@ export const trainArmy = async(req, res) => {
         );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "军队训练成功！");
+        handleResponse(res, 200, "金币与资源兑换成功！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `军队训练失败：${err.message || err}`);
+        handleResponse(res, 400, `金币与资源兑换失败：${err.message || err}`);
     } finally
     {
         client.release();

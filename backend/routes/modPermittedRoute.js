@@ -8,11 +8,14 @@ import {
 import { 
     getOGResArm
 } from "../controllers/ogInfoController.js";
+import { getOGWheel, spinOGWheel } from "../controllers/wheelController.js";
 
 
 const router = new express.Router();
 
 router.put("/ogresadd", verifyToken, authorizeRoles("admin", "moderator"), ogResourcesAddition);
+router.get("/wheelslots/:id", verifyToken, authorizeRoles("admin", "moderator"), getOGWheel);
+router.post("/wheelspin", verifyToken, authorizeRoles("admin", "moderator"), spinOGWheel);
 
 // BOTH NPC AND MODERATOR CAN ACCESS
 router.get("/ogresarm/:id", verifyToken, authorizeRoles("admin", "moderator", "npc"), getOGResArm);

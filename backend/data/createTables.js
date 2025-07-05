@@ -27,11 +27,11 @@ export const createOGTable = async() => {
     fdcx INT NOT NULL DEFAULT 2,
     fdcx_plus INT NOT NULL DEFAULT 2,
     mlmf INT NOT NULL DEFAULT 2,
-    smmf INT NOT NULL DEFAULT 2,
-    smmf_plus INT NOT NULL DEFAULT 2,
+    smmf INT NOT NULL DEFAULT 100,
     fygs INT NOT NULL DEFAULT 1,
     szj INT NOT NULL DEFAULT 1,
     pzyy INT NOT NULL DEFAULT 1,
+    gold INT NOT NULL DEFAULT 0,
     FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE);
     `;
     try 
@@ -122,11 +122,49 @@ export const initializeFreelandTable = async() => {
     };
 };
 
+export const createMarketTable = async() => {
+    const queryText = `
+    CREATE TABLE IF NOT EXISTS market (
+    wood INT DEFAULT 1,
+    bricks INT DEFAULT 1,
+    livestock INT DEFAULT 1,
+    wheat INT DEFAULT 1,
+    ore INT DEFAULT 1,
+    textiles INT DEFAULT 1);
+    `;
+    try
+    {
+        await pool.query(queryText);
+    } catch (error)
+    {
+        console.log("Error creating market table: ", error);
+    };
+};
+
+export const initializeMarketTable = async() => {
+    const queryText = `
+    DO $$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM market) THEN
+        INSERT INTO market DEFAULT VALUES;
+        END IF;
+    END $$;
+    `;
+    try
+    {
+        await pool.query(queryText);
+    } catch (error)
+    {
+        console.log("Error initializing market table: ", error);
+    };
+};
+
+
 export const createWheelTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS wheel (
     id INT PRIMARY KEY,
-    blank INT DEFAULT 0,
+    blank INT DEFAULT 3,
     wood INT DEFAULT 0,
     bricks INT DEFAULT 0,
     livestock INT DEFAULT 0,
@@ -149,7 +187,7 @@ export const createGamePhaseTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS gamephase (
     phase TEXT NOT NULL,
-    starttime TIME NOT NULL);
+    endtime TIME NOT NULL);
     `;
     try 
     {
@@ -166,7 +204,7 @@ export const initializeGamePhaseTable = async() => {
     DO $$
     BEGIN
         IF NOT EXISTS (SELECT 1 FROM gamephase) THEN
-        INSERT INTO gamephase(phase, starttime) VALUES ('1st Development Phase', '00:00:00');
+        INSERT INTO gamephase(phase, endtime) VALUES ('1st Development Phase', '00:00:00');
         END IF;
     END $$;
     `;
@@ -188,7 +226,7 @@ export const createInventoryTable = async() => {
     effect TEXT CHECK (effect IN (
         '釜底抽薪', '釜底抽薪+', '天道酬勤', '天道酬勤+', 
         '梅林的魔法', '防御工事', '石中剑', '知己知彼',
-        '兵不厌诈', '兵不厌诈+', '抛砖引玉', '十面埋伏', '十面埋伏+'
+        '兵不厌诈', '抛砖引玉', '十面埋伏'
     )) NOT NULL,
     target INT NOT NULL,
     type TEXT CHECK (type IN (
@@ -361,7 +399,34 @@ export const landTableTriggerFunction = async() => {
     const queryText = `
     CREATE OR REPLACE FUNCTION wheel_update()
     RETURNS TRIGGER AS $$
+    DECLARE
+        total_increase INTEGER := 0;
+        new_blank INTEGER;
     BEGIN
+        IF NEW.wood > OLD.wood THEN
+            total_increase := total_increase + (NEW.wood - OLD.wood);
+        END IF;
+
+        IF NEW.bricks > OLD.bricks THEN
+            total_increase := total_increase + (NEW.bricks - OLD.bricks);
+        END IF;
+
+        IF NEW.livestock > OLD.livestock THEN
+            total_increase := total_increase + (NEW.livestock - OLD.livestock);
+        END IF;
+
+        IF NEW.wheat > OLD.wheat THEN
+            total_increase := total_increase + (NEW.wheat - OLD.wheat);
+        END IF;
+
+        IF NEW.ore > OLD.ore THEN
+            total_increase := total_increase + (NEW.ore - OLD.ore);
+        END IF;
+
+        IF NEW.textiles > OLD.textiles THEN
+            total_increase := total_increase + (NEW.textiles - OLD.textiles);
+        END IF;
+
         UPDATE wheel
         SET 
             wood = NEW.wood,
@@ -371,6 +436,23 @@ export const landTableTriggerFunction = async() => {
             ore = NEW.ore,
             textiles = NEW.textiles
         WHERE id = NEW.id;
+
+        IF total_increase > 0 THEN
+            SELECT blank INTO new_blank FROM wheel WHERE id = NEW.id;
+
+            IF new_blank > 0 THEN
+                IF new_blank >= total_increase THEN
+                    new_blank := new_blank - total_increase;
+                ELSE
+                    new_blank := 0;
+                END IF;
+
+                UPDATE wheel
+                SET blank = new_blank
+                WHERE id = NEW.id;
+            END IF;
+        END IF;
+
         RETURN NEW;
     END;
     $$ LANGUAGE plpgsql;

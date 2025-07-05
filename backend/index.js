@@ -34,7 +34,9 @@ import {
   landTableTriggerFunction,
   landTableTrigger,
   landTableScoreTriggerFunction,
-  landTableScoreTrigger
+  landTableScoreTrigger,
+  createMarketTable,
+  initializeMarketTable
 } from "./data/createTables.js"
 
 dotenv.config();
@@ -77,6 +79,8 @@ async function initializeDatabase()
     await createLandTable();
     await createFreelandTable();
     await initializeFreelandTable();
+    await createMarketTable();
+    await initializeMarketTable();
     await createWheelTable();
     await createGamePhaseTable();
     await initializeGamePhaseTable();

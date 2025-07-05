@@ -2,43 +2,40 @@ import pool from "../config/db.js";
 import handleResponse from "../middlewares/responseHandler.js";
 import { 
     addOGEffectService,
-    getExistingEffectService,
     retimeExistingEffectService,
-    getExistingMerlinMagicService,
-    replaceExistingMerlinMagicService
+    replaceExistingMerlinMagicService,
+    getExistingEffectForUpdateService,
+    getExistingMerlinMagicForUpdateService
 } from "../models/inventoryTableService.js";
 import { 
-    getOGService,
     deductOGFDCXService,
     deductOGFDCXPlusService,
     deductOGMLMFService,
     deductOGSMMFService,
-    deductOGSMMFPlusService,
     deductOGFYGSService,
     deductOGSZJService,
     deductOGPZYYService,
+    getOGForUpdateService,
+    getOGGoldForUpdateService,
+    updateOGGoldService,
 } from "../models/ogTableService.js";
-import { 
-    getOGResourcesService, 
-    updateOGResourcesService 
-} from "../models/resourcesTableService.js";
 
 
 export const ogEffectAddition = async(req, res) => {
-    const { ogID, effect, targetID, type, resourcesChanges } = req.body;
+    const { ogID, effect, targetID, type, goldAmount } = req.body;
 
     const client = await pool.connect();
     try 
     {
         await client.query("BEGIN");
-        const ownerLimit = await getOGService(client, ogID);
-        const targetLimit = await getOGService(client, targetID);
-        const existing = await getExistingEffectService(client, ogID, effect, targetID, type)
+        const ownerLimit = await getOGForUpdateService(client, ogID);
+        const targetLimit = await getOGForUpdateService(client, targetID);
+        const existing = await getExistingEffectForUpdateService(client, ogID, effect, targetID, type)
         if (effect === "釜底抽薪")
         {
             if (targetLimit["fdcx"] == 0)
             {
-                throw new Error("Victim OG cannot be targetted again!");
+                throw new Error("选择的 OG 已不能再被 釜底抽薪 针对！");
             } else if (existing)
             {
                 await retimeExistingEffectService(client, existing, 11);
@@ -53,7 +50,7 @@ export const ogEffectAddition = async(req, res) => {
         {
             if (targetLimit["fdcx_plus"] == 0)
             {
-                throw new Error("Victim OG cannot be targetted again!");
+                throw new Error("选择的 OG 已不能再被 釜底抽薪+ 针对！");
             } else if (existing)
             {
                 await retimeExistingEffectService(client, existing, 11);
@@ -68,10 +65,10 @@ export const ogEffectAddition = async(req, res) => {
         {
             if (existing)
             {
-                await retimeExistingEffectService(client, existing, 11);
+                await retimeExistingEffectService(client, existing, 16);
             } else
             {
-                await addOGEffectService(client, ogID, effect, targetID, type, 11);
+                await addOGEffectService(client, ogID, effect, targetID, type, 16);
             }
 
         } else if (effect === "天道酬勤+")
@@ -86,10 +83,10 @@ export const ogEffectAddition = async(req, res) => {
 
         } else if (effect === "梅林的魔法")
         {
-            const existmlmf = await getExistingMerlinMagicService(client, ogID)
+            const existmlmf = await getExistingMerlinMagicForUpdateService(client, ogID)
             if (ownerLimit["mlmf"] == 0)
             {
-                throw new Error("梅林的魔法 usage limit reached!");
+                throw new Error(" 梅林的魔法 使用次数上限已至，不能再使用！");
             } else if (existmlmf)
             {
                 await replaceExistingMerlinMagicService(client, existmlmf, type);
@@ -104,7 +101,7 @@ export const ogEffectAddition = async(req, res) => {
         {
             if (ownerLimit["fygs"] == 0)
             {
-                throw new Error("防御工事 usage limit reached!");
+                throw new Error(" 防御工事 使用次数上限已至，不能再使用！");
             } else
             {
                 await addOGEffectService(client, ogID, effect, targetID, type, null);
@@ -115,14 +112,14 @@ export const ogEffectAddition = async(req, res) => {
         {
             if (ownerLimit["szj"] == 0)
             {
-                throw new Error("石中剑 usage limit reached!");
+                throw new Error(" 石中剑 使用次数上限已至，不能再使用！");
             } else
             {
                 await addOGEffectService(client, ogID, effect, targetID, type, null);
                 await deductOGSZJService(client, ogID);
             }
 
-        } else if (effect === "知己知彼" || effect === "兵不厌诈" || effect === "兵不厌诈+")
+        } else if (effect === "知己知彼" || effect === "兵不厌诈")
         {
             await addOGEffectService(client, ogID, effect, targetID, type, null);
 
@@ -130,7 +127,7 @@ export const ogEffectAddition = async(req, res) => {
         {
             if (ownerLimit["pzyy"] == 0)
             {
-                throw new Error("抛砖引玉 acquiring limit reached!");
+                throw new Error(" 抛砖引玉 使用次数上限已至，不能再使用！");
             } else
             {
                 await addOGEffectService(client, ogID, effect, targetID, type, null);
@@ -141,61 +138,36 @@ export const ogEffectAddition = async(req, res) => {
         {
             if (ownerLimit["smmf"] == 0)
             {
-                throw new Error("十面埋伏 acquiring limit reached!");
+                throw new Error(" 十面埋伏 使用次数上限已至，不能再使用！");
             } else
             {
                 await addOGEffectService(client, ogID, effect, targetID, type, null);
                 await deductOGSMMFService(client, targetID);
             }
 
-        } else if (effect === "十面埋伏+")
-        {
-            if (ownerLimit["smmf_plus"] == 0)
-            {
-                throw new Error("十面埋伏 + acquiring limit reached!");
-            } else
-            {
-                await addOGEffectService(client, ogID, effect, targetID, type, null);
-                await deductOGSMMFPlusService(client, targetID);
-            }
         }
 
-        const currentResources = await getOGResourcesService(client, ogID);
+        const currentGold = await getOGGoldForUpdateService(client, ogID);
         
-        if (!currentResources) 
+        if (!currentGold) 
         {
-            throw new Error("Invalid OG ID, unable to pay.");
+            throw new Error("所提供的 OG Id 不存在，无法支付特效！");
         }
 
-        for (const [resourceType, changes] of Object.entries(resourcesChanges))
+        if (currentGold < goldAmount)
         {
-            // Make Changes
-            if (currentResources[resourceType] < changes)
-            {
-                throw new Error(`Insufficient resources: ${resourceType}`);
-            } else 
-            {
-                currentResources[resourceType] -= changes;
-            }
+            throw new Error(`金币不足！`);
+        } else 
+        {
+            await updateOGGoldService(client, ogID, -1*goldAmount);
         }
-
-        await updateOGResourcesService(
-            client,
-            ogID,
-            currentResources.wood,
-            currentResources.bricks,
-            currentResources.livestock,
-            currentResources.wheat,
-            currentResources.ore,
-            currentResources.textiles
-        );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Special effect granted and paid for successfully!");
+        handleResponse(res, 200, "特效支付成功！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to pay for effect: ${err.message || err}`);
+        handleResponse(res, 400, `特效支付失败：${err.message || err}`);
     } finally
     {
         client.release();

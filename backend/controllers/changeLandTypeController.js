@@ -1,7 +1,7 @@
 import pool from "../config/db.js";
-import handleResponse from "../middlewares/responseHandler.js";
+import handleResponse, { RES_TRANSLATION } from "../middlewares/responseHandler.js";
 import { 
-    getOGSpecificLandService, 
+    getOGSpecificLandForUpdateService,
     useSwordInStoneEffectService 
 } from "../models/landTableService.js";
 
@@ -13,22 +13,22 @@ export const changeLandProperty = async(req, res) => {
     try 
     {
         await client.query("BEGIN");
-        const currentOld = await getOGSpecificLandService(client, ogID, oldType);
+        const currentOld = await getOGSpecificLandForUpdateService(client, ogID, oldType);
 
         if (currentOld === 0)
         {
-            throw new Error(`Insufficient land of ${oldType} resource!`);
+            throw new Error(`您的 ${RES_TRANSLATION[oldType]} 产地数量不足！`);
         } else 
         {
             await useSwordInStoneEffectService(client, ogID, oldType, newType);
         }
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Land property changed successfully!");
+        handleResponse(res, 200, `已将 ${RES_TRANSLATION[oldType]} 产地变成 ${RES_TRANSLATION[newType]} 产地！`);
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to change land property: ${err.message || err}`);
+        handleResponse(res, 400, `无法改变产地属性：${err.message || err}`);
     } finally
     {
         client.release();

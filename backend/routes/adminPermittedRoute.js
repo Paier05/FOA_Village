@@ -2,7 +2,8 @@ import express from "express";
 import verifyToken from "../middlewares/authMiddleware.js";
 import authorizeRoles from "../middlewares/roleMiddleware.js";
 import { 
-    updateGamePhase
+    updateGamePhase,
+    updateGamePhaseTime
 } from "../controllers/gamePhaseController.js";
 import { 
     getAllAccounts, 
@@ -10,14 +11,19 @@ import {
     validateAccount 
 } from "../controllers/manageAccountsController.js";
 import { 
-    updateEvent 
+    updateEvent, 
+    updateEventTime
 } from "../controllers/eventsController.js";
 import { forceSetEffectAddition, forceSetFreeland, forceSetOGArmy, forceSetOGEffectConstraints, forceSetOGLand, forceSetOGResources } from "../controllers/forceSetTableController.js";
+import { getTotalDevelopedLand } from "../controllers/ogInfoController.js";
 
 const router = new express.Router();
 
 router.post("/gamephase", verifyToken, authorizeRoles("admin"), updateGamePhase);
+router.put("/gamephasetime", verifyToken, authorizeRoles("admin"), updateGamePhaseTime);
 router.put("/events", verifyToken, authorizeRoles("admin"), updateEvent);
+router.put("/eventstime", verifyToken, authorizeRoles("admin"), updateEventTime);
+router.get("/totaldevlands", verifyToken, authorizeRoles("admin"), getTotalDevelopedLand);
 
 router.put("/accounts/validation", verifyToken, authorizeRoles("admin"), validateAccount);
 router.put("/accounts/promotion", verifyToken, authorizeRoles("admin"), promoteAccount);

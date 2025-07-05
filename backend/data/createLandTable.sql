@@ -16,7 +16,34 @@ DROP TRIGGER IF EXISTS after_update_land_score ON land;
 
 CREATE OR REPLACE FUNCTION wheel_update()
 RETURNS TRIGGER AS $$
+DECLARE
+    total_increase INTEGER := 0;
+    new_blank INTEGER;
 BEGIN
+    IF NEW.wood > OLD.wood THEN
+        total_increase := total_increase + (NEW.wood - OLD.wood);
+    END IF;
+
+    IF NEW.bricks > OLD.bricks THEN
+        total_increase := total_increase + (NEW.bricks - OLD.bricks);
+    END IF;
+
+    IF NEW.livestock > OLD.livestock THEN
+        total_increase := total_increase + (NEW.livestock - OLD.livestock);
+    END IF;
+
+    IF NEW.wheat > OLD.wheat THEN
+        total_increase := total_increase + (NEW.wheat - OLD.wheat);
+    END IF;
+
+    IF NEW.ore > OLD.ore THEN
+        total_increase := total_increase + (NEW.ore - OLD.ore);
+    END IF;
+
+    IF NEW.textiles > OLD.textiles THEN
+        total_increase := total_increase + (NEW.textiles - OLD.textiles);
+    END IF;
+
     UPDATE wheel
     SET 
         wood = NEW.wood,
@@ -26,6 +53,23 @@ BEGIN
         ore = NEW.ore,
         textiles = NEW.textiles
     WHERE id = NEW.id;
+
+    IF total_increase > 0 THEN
+        SELECT blank INTO new_blank FROM wheel WHERE id = NEW.id;
+
+        IF new_blank > 0 THEN
+            IF new_blank >= total_increase THEN
+                new_blank := new_blank - total_increase;
+            ELSE
+                new_blank := 0;
+            END IF;
+
+            UPDATE wheel
+            SET blank = new_blank
+            WHERE id = NEW.id;
+        END IF;
+    END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

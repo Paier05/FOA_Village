@@ -1,13 +1,8 @@
 import pool from "../config/db.js";
 import {
-    getOGResourcesService,
     updateOGResourcesService,
-    updateOGWoodService,
-    updateOGBricksService,
-    updateOGLivestockService,
-    updateOGWheatService,
-    updateOGOreService,
-    updateOGTextilesService
+    getOGResourcesForUpdateService,
+    updateOGSpecificResourceService
 } from "../models/resourcesTableService.js";
 import {
     getDebuffPerpetratorIDService,
@@ -17,7 +12,9 @@ import {
     userGetAllOGService
 } from "../models/usersModel.js";
 import handleResponse from "../middlewares/responseHandler.js";
-import { getEventService } from "../models/eventsTableService.js";
+import { 
+    getEventService 
+} from "../models/eventsTableService.js";
 
 const EVENTS = {
     "干旱": { resource: "wheat", type: 0 },
@@ -34,12 +31,12 @@ const EVENTS = {
     "织女降凡": { resource: "textiles", type: 2 }
 };
 
-export const ogResourcesAddition = async(req, res, next) => {
+export const ogResourcesAddition = async(req, res) => {
     const { ogID, resourcesChanges } = req.body;
 
     if (!ogID || typeof resourcesChanges !== "object") 
     {
-        return handleResponse(res, 400, "Invalid trade payload!");
+        return handleResponse(res, 400, "无效的酬载！");
     }
 
     const client = await pool.connect();
@@ -48,11 +45,11 @@ export const ogResourcesAddition = async(req, res, next) => {
     {
         await client.query("BEGIN");
 
-        const currentResources = await getOGResourcesService(client, ogID);
+        const currentResources = await getOGResourcesForUpdateService(client, ogID);
 
         if (!currentResources) 
         {
-            throw new Error("Invalid OG ID(s).");
+            throw new Error("无效的OG Id。");
         }
         
         // Check for 突发事件
@@ -92,26 +89,8 @@ export const ogResourcesAddition = async(req, res, next) => {
                 const checkfdcxp = await getDebuffPerpetratorIDService(client, "釜底抽薪+", ogID, resourceType);
                 if (checkfdcxp)
                 {
-                    const originalResources = await getOGResourcesService(client, checkfdcxp);
-                    if (resourceType === "wood")
-                    {
-                        await updateOGWoodService(client, checkfdcxp, originalResources[resourceType] + resourcesChanges[resourceType]);
-                    } else if (resourceType === "bricks")
-                    {
-                        await updateOGBricksService(client, checkfdcxp, originalResources[resourceType] + resourcesChanges[resourceType]);
-                    } else if (resourceType === "livestock")
-                    {
-                        await updateOGLivestockService(client, checkfdcxp, originalResources[resourceType] + resourcesChanges[resourceType]);
-                    } else if (resourceType === "wheat")
-                    {
-                        await updateOGWheatService(client, checkfdcxp, originalResources[resourceType] + resourcesChanges[resourceType]);
-                    } else if (resourceType === "ore")
-                    {
-                        await updateOGOreService(client, checkfdcxp, originalResources[resourceType] + resourcesChanges[resourceType]);
-                    } else if (resourceType === "textiles")
-                    {
-                        await updateOGTextilesService(client, checkfdcxp, originalResources[resourceType] + resourcesChanges[resourceType]);
-                    }
+                    await getOGResourcesForUpdateService(client, checkfdcxp);
+                    await updateOGSpecificResourceService(client, checkfdcxp, resourceType, resourcesChanges[resourceType]);
                     resourcesChanges[resourceType] = 0;
                 }
             }
@@ -143,13 +122,31 @@ export const ogResourcesAddition = async(req, res, next) => {
         );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "OG resources updated successfully!");
+        handleResponse(res, 200, "OG 资源库已成功修改！");
 
     } catch (err) 
     {
         await client.query("ROLLBACK");
-        console.error("Error updating OG resources:", err);
-        handleResponse(res, 400, "OG resources update failed!");
+        handleResponse(res, 400, `OG 资源库已成功修改失败: ${err.message || err}`);
+    } finally 
+    {
+        client.release();
+    }
+};
+
+export const getAllOGs = async (req, res) => 
+{
+    const client = await pool.connect();
+    try 
+    {
+        await client.query("BEGIN");
+        const ogList = await userGetAllOGService(client);
+        await client.query("COMMIT");
+        handleResponse(res, 200, "OG 名单已成功读取！", ogList);
+    } catch (err) 
+    {
+        await client.query("ROLLBACK");
+        handleResponse(res, 400, `OG 名单读取失败: ${err}`);
     } finally 
     {
         client.release();
@@ -157,6 +154,7 @@ export const ogResourcesAddition = async(req, res, next) => {
 };
 
 
+/*
 export const ogResourcesDeduction = async(req, res, next) => {
     const { ogID, resourcesChanges } = req.body;
 
@@ -214,23 +212,4 @@ export const ogResourcesDeduction = async(req, res, next) => {
         client.release();
     }
 };
-
-
-export const getAllOGs = async (req, res, next) => 
-{
-    const client = await pool.connect();
-    try 
-    {
-        await client.query("BEGIN");
-        const ogList = await userGetAllOGService(client);
-        await client.query("COMMIT");
-        handleResponse(res, 200, "OG list acquired successfully!", ogList);
-    } catch (err) 
-    {
-        await client.query("ROLLBACK");
-        next(err);
-    } finally 
-    {
-        client.release();
-    }
-};
+*/

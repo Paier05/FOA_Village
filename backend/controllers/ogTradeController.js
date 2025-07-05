@@ -1,7 +1,7 @@
 import pool from "../config/db.js";
-import handleResponse from "../middlewares/responseHandler.js";
+import handleResponse, { RES_TRANSLATION } from "../middlewares/responseHandler.js";
 import { 
-    getOGResourcesService, 
+    getOGResourcesForUpdateService,
     updateOGResourcesService 
 } from "../models/resourcesTableService.js";
 import {
@@ -16,7 +16,7 @@ export const handleTrade = async (req, res) =>
 
     if (!toOg || typeof resources !== "object") 
     {
-        return handleResponse(res, 400, "Invalid trade payload.");
+        return handleResponse(res, 400, "所提供的交易负载有问题！");
     }
 
     const client = await pool.connect();
@@ -25,24 +25,20 @@ export const handleTrade = async (req, res) =>
     {
         await client.query("BEGIN");
 
-        const senderResources = await getOGResourcesService(client, fromOgId);
-        const receiverResources = await getOGResourcesService(client, toOg);
+        const senderResources = await getOGResourcesForUpdateService(client, fromOgId);
+        const receiverResources = await getOGResourcesForUpdateService(client, toOg);
 
         if (!senderResources || !receiverResources) 
         {
-            throw new Error("Invalid OG ID(s).");
+            throw new Error("所提供的 OG Id 不存在，无法进行交易！");
         }
 
         // Validate trade
         for (const [resourceType, amount] of Object.entries(resources)) 
         {
-            if (!senderResources.hasOwnProperty(resourceType)) 
-            {
-                throw new Error(`Invalid resource: ${resourceType}`);
-            }
             if (amount < 0 || senderResources[resourceType] < amount) 
             {
-                throw new Error(`Insufficient ${resourceType}`);
+                throw new Error(` ${RES_TRANSLATION[resourceType]} 资源不足！`);
             }
         }
 
@@ -80,16 +76,15 @@ export const handleTrade = async (req, res) =>
             newReceiver.wheat,
             newReceiver.ore,
             newReceiver.textiles
-            );
+        );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Trade successful!");
+        handleResponse(res, 200, "交易成功！");
 
     } catch (err) 
     {
         await client.query("ROLLBACK");
-        console.error("Trade error:", err);
-        handleResponse(res, 400, `Trade failed: ${err.message}`);
+        handleResponse(res, 400, `交易失败：${err.message || err}`);
     } finally 
     {
         client.release();
@@ -98,7 +93,7 @@ export const handleTrade = async (req, res) =>
 
 
 
-export const getAvailableOGs = async (req, res, next) => 
+export const getAvailableOGs = async (req, res) => 
 {
     const client = await pool.connect();
     try 
@@ -107,11 +102,11 @@ export const getAvailableOGs = async (req, res, next) =>
         const currentUserId = req.user.id;
         const ogList = await userGetAvailableOGService(client, currentUserId);
         await client.query("COMMIT");
-        handleResponse(res, 200, "Successfully retrieved available OGs for trading!", ogList);
+        handleResponse(res, 200, "成功读取所有 OG 名单！", ogList);
     } catch (err) 
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to retrieve available OGs for trading: ${err}`);
+        handleResponse(res, 400, `无法读取所有 OG 名单：${err}`);
     } finally 
     {
         client.release();

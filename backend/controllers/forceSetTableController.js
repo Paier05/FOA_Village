@@ -1,22 +1,30 @@
 import pool from "../config/db.js";
-import handleResponse from "../middlewares/responseHandler.js";
+import handleResponse, { RES_TRANSLATION } from "../middlewares/responseHandler.js";
 import { 
-    getAllFreelandService, 
+    getAllFreelandForUpdateService,
     updateAllFreelandService 
 } from "../models/freelandTableService.js";
 import { 
     addOGEffectService, 
-    getExistingEffectService, 
-    getExistingMerlinMagicService, 
+    getExistingEffectForUpdateService, 
+    getExistingMerlinMagicForUpdateService, 
     replaceExistingMerlinMagicService, 
     retimeExistingEffectService 
 } from "../models/inventoryTableService.js";
 import { 
-    getOGLandService, 
+    getOGLandForUpdateService,
     updateOGLandService 
 } from "../models/landTableService.js";
-import { getOGArmyService, getOGService, updateOGArmyService, updateSpecificEffectConstraintService } from "../models/ogTableService.js";
-import { getOGResourcesService, updateOGResourcesService } from "../models/resourcesTableService.js";
+import { 
+    getOGArmyForUpdateService,
+    getOGForUpdateService, 
+    updateOGArmyService, 
+    updateSpecificEffectConstraintService 
+} from "../models/ogTableService.js";
+import { 
+    getOGResourcesForUpdateService,
+    updateOGResourcesService 
+} from "../models/resourcesTableService.js";
 
 
 // Force Set Gamephase Table
@@ -57,13 +65,13 @@ export const forceSetFreeland = async(req, res) => {
     try 
     {
         await client.query("BEGIN");
-        const allFreeland = await getAllFreelandService(client);
+        const allFreeland = await getAllFreelandForUpdateService(client);
 
         for (const [landType, changes] of Object.entries(freelandChanges))
         {
             if (changes < 0 && allFreeland[landType] < -1*changes)
             {
-                throw new Error(`Insufficient free land type: ${landType}`);
+                throw new Error(`未开发的 ${RES_TRANSLATION[landType]} 产地数量不足！`);
             } else 
             {
                 allFreeland[landType] += changes;
@@ -81,11 +89,11 @@ export const forceSetFreeland = async(req, res) => {
         );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Freeland table updated successfully!");
+        handleResponse(res, 200, "未开发产地的数量已强制被修改！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to update free land table: ${err.message || err}`);
+        handleResponse(res, 400, `未开发产地的数量强制被修改失败：${err.message || err}`);
     } finally
     {
         client.release();
@@ -96,24 +104,24 @@ export const forceSetFreeland = async(req, res) => {
 // Force Set OG Land Amount
 // Won't affect freeland table
 export const forceSetOGLand = async(req, res) => {
-    const { ogID, landChanges} = req.body;
+    const { ogID, landChanges } = req.body;
     const client = await pool.connect();
 
     try 
     {
         await client.query("BEGIN");
-        const ogland = await getOGLandService(client, ogID);
+        const ogland = await getOGLandForUpdateService(client, ogID);
 
         if (!ogland) 
         {
-            throw new Error("Invalid OG ID, unable to make changes.");
+            throw new Error("所提供的 OG Id 不存在，无法修改产地资料！");
         }
 
         for (const [landType, changes] of Object.entries(landChanges))
         {
             if (changes < 0 && ogland[landType] < -1*changes)
             {
-                throw new Error(`Insufficient land type: ${landType}`);
+                throw new Error(` ${RES_TRANSLATION[landType]} 产地不足！`);
             } else 
             {
                 ogland[landType] += changes;
@@ -132,11 +140,11 @@ export const forceSetOGLand = async(req, res) => {
         );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Land developed and paid for successfully!");
+        handleResponse(res, 200, "产地资料已被强制修改成功！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to develop land: ${err.message || err}`);
+        handleResponse(res, 400, `产地资料被强制修改失败：${err.message || err}`);
     } finally
     {
         client.release();
@@ -154,7 +162,7 @@ export const forceSetEffectAddition = async(req, res) => {
     {
         await client.query("BEGIN");
 
-        const existing = await getExistingEffectService(client, ogID, effect, targetID, type)
+        const existing = await getExistingEffectForUpdateService(client, ogID, effect, targetID, type)
         if (effect === "釜底抽薪")
         {
             if (existing)
@@ -197,7 +205,7 @@ export const forceSetEffectAddition = async(req, res) => {
 
         } else if (effect === "梅林的魔法")
         {
-            const existmlmf = await getExistingMerlinMagicService(client, ogID)
+            const existmlmf = await getExistingMerlinMagicForUpdateService(client, ogID)
             if (existmlmf)
             {
                 await replaceExistingMerlinMagicService(client, existmlmf, type);
@@ -207,18 +215,17 @@ export const forceSetEffectAddition = async(req, res) => {
             }
 
         } else if (effect === "防御工事" || effect === "石中剑" || effect === "知己知彼" || 
-                effect === "兵不厌诈" || effect === "兵不厌诈+" || effect === "抛砖引玉" || 
-                effect === "十面埋伏" || effect === "十面埋伏+")
+                effect === "兵不厌诈" || effect === "抛砖引玉" || effect === "十面埋伏")
         {
             await addOGEffectService(client, ogID, effect, targetID, type, null);
         } 
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Special effect forcefully granted successfully!");
+        handleResponse(res, 200, "特效资料已强制被修改！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to grant effect: ${err.message || err}`);
+        handleResponse(res, 400, `特效资料强制修改失败：${err.message || err}`);
     } finally
     {
         client.release();
@@ -235,18 +242,18 @@ export const forceSetOGResources = async(req, res) => {
     {
         await client.query("BEGIN");
 
-        const currentResources = await getOGResourcesService(client, ogID);   
+        const currentResources = await getOGResourcesForUpdateService(client, ogID);   
 
         if (!currentResources) 
         {
-            throw new Error("Invalid OG ID, unable to make changes.");
+            throw new Error("所提供的 OG Id 不存在，无法修改资源数量！");
         }
 
         for (const [resourceType, changes] of Object.entries(resourcesChanges))
         {
             if (changes < 0 && currentResources[resourceType] < -1*changes)
             {
-                throw new Error(`Insufficient resources: ${resourceType}`);
+                throw new Error(` ${RES_TRANSLATION[resourceType]} 资源不足！`);
             } else 
             {
                 currentResources[resourceType] += changes;
@@ -265,11 +272,11 @@ export const forceSetOGResources = async(req, res) => {
         );
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "OG resources updated successfully!");
+        handleResponse(res, 200, "OG 的资源数量已成功被修改！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to update OG resources: ${err.message || err}`);
+        handleResponse(res, 400, `OG 的资源数量修改失败：${err.message || err}`);
     } finally
     {
         client.release();
@@ -285,22 +292,22 @@ export const forceSetOGArmy = async(req, res) => {
     try 
     {
         await client.query("BEGIN");
-        const army = await getOGArmyService(client, ogID);
+        const army = await getOGArmyForUpdateService(client, ogID);
 
         if (armyAmount < 0 && army < -1*armyAmount)
         {
-            throw new Error(`Insufficient army amount!`);
+            throw new Error(`军队数量不足！`);
         } else 
         {
             await updateOGArmyService(client, ogID, armyAmount);
         }
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Army amount updated successfully!");
+        handleResponse(res, 200, "军队数量已成功被修改！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to update army amount: ${err.message || err}`);
+        handleResponse(res, 400, `军队数量修改失败：${err.message || err}`);
     } finally
     {
         client.release();
@@ -314,7 +321,6 @@ const CONSTRAINTS = {
     "釜底抽薪+": "fdcx_plus",
     "梅林的魔法": "mlmf",
     "十面埋伏": "smmf",
-    "十面埋伏+": "smmf_plus",
     "防御工事": "fygs",
     "石中剑": "szj",
     "抛砖引玉": "pzyy"
@@ -326,22 +332,22 @@ export const forceSetOGEffectConstraints = async(req, res) => {
     try 
     {
         await client.query("BEGIN");
-        const ogInfo = await getOGService(client, ogID);
+        const ogInfo = await getOGForUpdateService(client, ogID);
 
         if (changes < 0 && ogInfo[CONSTRAINTS[effect]] < -1*changes)
         {
-            throw new Error(`Insufficient constraint limit for ${effect}!`);
+            throw new Error(` ${effect} 特效的上限次数不足！`);
         } else 
         {
             await updateSpecificEffectConstraintService(client, ogID, CONSTRAINTS[effect], changes);
         }
 
         await client.query("COMMIT");
-        handleResponse(res, 200, "Effect constraints updated successfully!");
+        handleResponse(res, 200, "特效的上限已修改成功！");
     } catch(err)
     {
         await client.query("ROLLBACK");
-        handleResponse(res, 400, `Failed to update effect constraints: ${err.message || err}`);
+        handleResponse(res, 400, `特效的上限修改失败：${err.message || err}`);
     } finally
     {
         client.release();

@@ -15,7 +15,7 @@ export const getMerlinMagicDetailsService = async(client, owner) => {
     return result.rows[0]?.type;
 };
 
-export const getExistingEffectService = async(client, owner, effect, target, type) => {
+export const getExistingEffectForUpdateService = async(client, owner, effect, target, type) => {
     const result = await client.query(
         "SELECT effect_id FROM inventory WHERE id = $1 AND effect = $2 AND target = $3 AND type = $4 AND status = 1 FOR UPDATE",
         [owner, effect, target, type]
@@ -23,7 +23,7 @@ export const getExistingEffectService = async(client, owner, effect, target, typ
     return result.rows[0]?.effect_id;
 };
 
-export const getExistingMerlinMagicService = async(client, owner) => {
+export const getExistingMerlinMagicForUpdateService = async(client, owner) => {
     const result = await client.query(
         "SELECT effect_id FROM inventory WHERE id = $1 AND effect = '梅林的魔法' AND status = 1 FOR UPDATE",
         [owner]

@@ -1,19 +1,28 @@
 export const getOGService = async(client, id) => {
     const result = await client.query(
-        "SELECT score, army, fdcx, fdcx_plus, mlmf, smmf, smmf_plus, fygs, szj, pzyy FROM og WHERE id = $1 FOR UPDATE",
+        "SELECT score, army, fdcx, fdcx_plus, mlmf, smmf, fygs, szj, pzyy FROM og WHERE id = $1",
         [id]
     );
     return result.rows[0];
 };
 
-export const getAllOGService = async(client) => {
+export const getOGAllConstraintsService = async(client, id) => {
     const result = await client.query(
-        "SELECT * FROM og",
+        "SELECT fdcx, fdcx_plus, mlmf, smmf, fygs, szj, pzyy FROM og WHERE id = $1",
+        [id]
     );
-    return result.rows;
+    return result.rows[0];
 };
 
-export const getOGArmyService = async(client, id) => {
+export const getOGForUpdateService = async(client, id) => {
+    const result = await client.query(
+        "SELECT score, army, fdcx, fdcx_plus, mlmf, smmf, fygs, szj, pzyy FROM og WHERE id = $1 FOR UPDATE",
+        [id]
+    );
+    return result.rows[0];
+};
+
+export const getOGArmyForUpdateService = async(client, id) => {
     const result = await client.query(
         "SELECT army FROM og WHERE id = $1 FOR UPDATE",
         [id]
@@ -24,6 +33,30 @@ export const getOGArmyService = async(client, id) => {
 export const updateOGArmyService = async(client, id, amount) => {
     const result = await client.query(
         "UPDATE og SET army = army + $1 WHERE id = $2 RETURNING *",
+        [amount, id]
+    );
+    return result.rows[0];
+};
+
+export const getOGGoldService = async(client, id) => {
+    const result = await client.query(
+        "SELECT gold FROM og WHERE id = $1",
+        [id]
+    );
+    return result.rows[0]?.gold;
+};
+
+export const getOGGoldForUpdateService = async(client, id) => {
+    const result = await client.query(
+        "SELECT gold FROM og WHERE id = $1 FOR UPDATE",
+        [id]
+    );
+    return result.rows[0]?.gold;
+};
+
+export const updateOGGoldService = async(client, id, amount) => {
+    const result = await client.query(
+        "UPDATE og SET gold = gold + $1 WHERE id = $2 RETURNING *",
         [amount, id]
     );
     return result.rows[0];
@@ -61,14 +94,6 @@ export const deductOGSMMFService = async(client, id) => {
     return result.rows[0];
 };
 
-export const deductOGSMMFPlusService = async(client, id) => {
-    const result = await client.query(
-        "UPDATE og SET smmf_plus = smmf_plus - 1 WHERE id = $1 RETURNING *",
-        [id]
-    );
-    return result.rows[0];
-};
-
 export const deductOGFYGSService = async(client, id) => {
     const result = await client.query(
         "UPDATE og SET fygs = fygs - 1 WHERE id = $1 RETURNING *",
@@ -93,14 +118,6 @@ export const deductOGPZYYService = async(client, id) => {
     return result.rows[0];
 };
 
-export const resetArmyService = async(client) => {
-    const result = await client.query(
-        "UPDATE og SET army = 0 RETURNING *"
-    );
-    return result.rows;
-};
-
-
 export const updateSpecificEffectConstraintService = async(client, id, effect, changes) => {
     const result = await client.query(
         `UPDATE og SET ${effect} = ${effect} + $1 WHERE id = $2 RETURNING *`,
@@ -108,3 +125,28 @@ export const updateSpecificEffectConstraintService = async(client, id, effect, c
     );
     return result.rows[0];
 };
+
+
+/*
+export const getAllOGService = async(client) => {
+    const result = await client.query(
+        "SELECT * FROM og",
+    );
+    return result.rows;
+};
+
+export const getOGArmyService = async(client, id) => {
+    const result = await client.query(
+        "SELECT army FROM og WHERE id = $1",
+        [id]
+    );
+    return result.rows[0]?.army;
+};
+
+export const resetArmyService = async(client) => {
+    const result = await client.query(
+        "UPDATE og SET army = 0 RETURNING *"
+    );
+    return result.rows;
+};
+*/

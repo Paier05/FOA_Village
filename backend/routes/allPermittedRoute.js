@@ -12,6 +12,7 @@ import {
 import { 
     getEvent 
 } from "../controllers/eventsController.js";
+import { getMarket } from "../controllers/marketController.js";
 
 const router = new express.Router();
 
@@ -20,5 +21,6 @@ router.get("/events", verifyToken, authorizeRoles("admin", "npc", "moderator", "
 router.get("/leaderboard", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getLeaderboard);
 router.get("/allreswithheld", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getAllResourcesWithheld);
 router.get("/allfreeland", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getFreeLandLeft);
+router.get("/market", verifyToken, authorizeRoles("admin", "npc", "moderator", "og"), getMarket);
 
 export default router;
