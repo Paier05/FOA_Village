@@ -75,3 +75,42 @@ Step to Set Up:
         "start:frontend": "npm start --prefix frontend",
         "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
     v. This will allow us to run both frontend and backend by just typing "npm start" in root directory
+
+12. Allowing the app to run on both phones and laptop
+    i. Underlying issue: phone uses ipv4:3000 while laptop uses localhost
+    ii. To solve: let the app listen for 0.0.0.0 as host and add frontendURL in .env file
+    iii. Also open a new .env file inside of front-end folder to store HOST:(your laptop's ipv4)
+
+Dependencies:
+Backend:
+express
+dotenv
+pg
+cors
+cookie-parser
+bcryptjs
+jsonwebtoken
+
+Front-end:
+react
+react-dom
+react-router-dom
+react-icons
+axios
+react-scripts
+web-vitals
+react-wheel-of-prizes
+
+Add ( --legacy-peer-deps) behind if there is react versions conflict
+Example: npm install react-wheel-of-prizes --legacy-peer-deps
+
+
+When running with server, edit the .env files in both root folder (FOA_Village) and front-end folder.
+What to edit?
+1. .env file in root
+    a. APP_PORT  -  Change to the correct port (or leave it as is if it is correct)
+    b. FRONTEND_URL  -  change to the front-end's link, something like https://awslink-frontenddomain.com
+
+2. .env file in front-end
+    a. REACT_APP_API_URL  -  change to the backend's link, something like https://awslink-backenddomain.com
+    b. HOST  -  This was used to host the react app during local dev, can remove it
