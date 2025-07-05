@@ -16,6 +16,7 @@ import {
 } from "../controllers/eventsController.js";
 import { forceSetEffectAddition, forceSetFreeland, forceSetOGArmy, forceSetOGEffectConstraints, forceSetOGLand, forceSetOGResources } from "../controllers/forceSetTableController.js";
 import { getTotalDevelopedLand } from "../controllers/ogInfoController.js";
+import { register } from "../controllers/authController.js";
 
 const router = new express.Router();
 
@@ -28,6 +29,7 @@ router.get("/totaldevlands", verifyToken, authorizeRoles("admin"), getTotalDevel
 router.put("/accounts/validation", verifyToken, authorizeRoles("admin"), validateAccount);
 router.put("/accounts/promotion", verifyToken, authorizeRoles("admin"), promoteAccount);
 router.get("/accounts/retrieval", verifyToken, authorizeRoles("admin"), getAllAccounts);
+router.post("/accounts/register", verifyToken, authorizeRoles("admin"), register);
 
 router.post("/forceset/addeffs", verifyToken, authorizeRoles("admin"), forceSetEffectAddition);
 router.put("/forceset/freeland", verifyToken, authorizeRoles("admin"), forceSetFreeland);
