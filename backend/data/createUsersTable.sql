@@ -56,3 +56,11 @@ CREATE TRIGGER after_register
 AFTER UPDATE ON users
 FOR EACH ROW 
 EXECUTE FUNCTION after_registration();
+
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM users) THEN
+    INSERT INTO users(name, password, role, valid) VALUES ('Admin2526', '$2b$10$E.yEJaBusqWJmQBrmOhuAexwSbJ62/MZUMfsF5CHLWQy8EEPXkkca', 'admin', 1);
+    END IF;
+END $$;

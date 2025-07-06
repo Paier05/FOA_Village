@@ -18,6 +18,24 @@ export const createUsersTable = async() => {
     };
 };
 
+export const initializeUsersTableAdminAccount = async() => {
+    const queryText = `
+    DO $$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM users) THEN
+        INSERT INTO users(name, password, role, valid) VALUES ('Admin2526', '$2b$10$E.yEJaBusqWJmQBrmOhuAexwSbJ62/MZUMfsF5CHLWQy8EEPXkkca', 'admin', 1);
+        END IF;
+    END $$;
+    `;
+    try
+    {
+        await pool.query(queryText);
+    } catch (error)
+    {
+        console.log("Error initializing admin account: ", error);
+    };
+};
+
 export const createOGTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS og (
@@ -164,7 +182,7 @@ export const createWheelTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS wheel (
     id INT PRIMARY KEY,
-    blank INT DEFAULT 8,
+    blank INT DEFAULT 3,
     wood INT DEFAULT 0,
     bricks INT DEFAULT 0,
     livestock INT DEFAULT 0,
