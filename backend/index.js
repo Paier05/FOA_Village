@@ -36,7 +36,8 @@ import {
   landTableScoreTriggerFunction,
   landTableScoreTrigger,
   createMarketTable,
-  initializeMarketTable
+  initializeMarketTable,
+  initializeUsersTableAdminAccount
 } from "./data/createTables.js"
 
 dotenv.config();
@@ -74,6 +75,7 @@ async function initializeDatabase()
   try 
   {
     await createUsersTable();
+    await initializeUsersTableAdminAccount();
     await createOGTable();
     await createResourcesTable();
     await createLandTable();
