@@ -18,6 +18,9 @@ RUN npm run build
 # Use nginx to serve the static files
 FROM nginx:stable-alpine
 
+# Copy custom nginx config
+COPY front-end/nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy built React files to nginx html folder
 COPY --from=build /app/build /usr/share/nginx/html
 
