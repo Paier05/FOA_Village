@@ -7,6 +7,8 @@ import {
 } from "react-icons/fa";
 import { GiSparkles } from "react-icons/gi";
 
+const resourceTypes = ["wood", "bricks", "livestock", "wheat", "ore", "textiles"];
+
 const effectOptions = [
   "釜底抽薪", "釜底抽薪+", "天道酬勤", "天道酬勤+",
   "梅林的魔法", "防御工事", "知己知彼",
@@ -99,6 +101,16 @@ const PayForEffect = () => {
     setTargetOG(ogOptions[(i + 1) % ogOptions.length]?.id);
   };
 
+  const scrollTypeUp = () => {
+    const i = resourceTypes.findIndex(r => r === type);
+    setType(resourceTypes[(i <= 0 ? resourceTypes.length : i) - 1]);
+  };
+
+  const scrollTypeDown = () => {
+    const i = resourceTypes.findIndex(r => r === type);
+    setType(resourceTypes[(i + 1) % resourceTypes.length]);
+  };
+
   return (
     <div className="og-trading-container medieval-bg">
       <h2 className="og-trading-medieval-title">
@@ -146,6 +158,28 @@ const PayForEffect = () => {
             <button className="all-scroll-arrow" onClick={scrollTargetOGDown}>▼</button>
           </div>
         </div>
+      )}
+
+      {/* Conditional target resource selector */}
+      {["釜底抽薪", "釜底抽薪+", "梅林的魔法"].includes(effect) && (
+          <div className="all-og-selector-container">
+          <h3>指定资源</h3>
+          <div className="all-og-scroll-controls">
+              <button className="all-scroll-arrow" onClick={scrollTypeUp}>▲</button>
+              <div className="all-og-scroll-list">
+              {resourceTypes.map(res => (
+                  <div
+                  key={res}
+                  className={`all-og-item ${type === res ? "selected" : ""}`}
+                  onClick={() => setType(res)}
+                  >
+                  {resourceLabels[res] || res}
+                  </div>
+              ))}
+              </div>
+              <button className="all-scroll-arrow" onClick={scrollTypeDown}>▼</button>
+          </div>
+          </div>
       )}
 
       {/* Gold Slider */}
