@@ -83,18 +83,21 @@ export const ogEffectAddition = async(req, res) => {
 
         } else if (effect === "梅林的魔法")
         {
-            const existmlmf = await getExistingMerlinMagicForUpdateService(client, ogID)
             if (ownerLimit["mlmf"] == 0)
             {
                 throw new Error(" 梅林的魔法 使用次数上限已至，不能再使用！");
-            } else if (existmlmf)
+            } else 
             {
-                await replaceExistingMerlinMagicService(client, existmlmf, type);
-                await deductOGMLMFService(client, ogID);
-            } else
-            {
-                await addOGEffectService(client, ogID, effect, targetID, type, 11);
-                await deductOGMLMFService(client, ogID);
+                const existmlmf = await getExistingMerlinMagicForUpdateService(client, ogID)
+                if (existmlmf)
+                {
+                    await replaceExistingMerlinMagicService(client, existmlmf, type);
+                    await deductOGMLMFService(client, ogID);
+                } else
+                {
+                    await addOGEffectService(client, ogID, effect, targetID, type, 11);
+                    await deductOGMLMFService(client, ogID);
+                }
             }
 
         } else if (effect === "防御工事")
