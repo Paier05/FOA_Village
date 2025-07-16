@@ -9,6 +9,15 @@ import { GiSparkles } from "react-icons/gi";
 
 const resourceTypes = ["wood", "bricks", "livestock", "wheat", "ore", "textiles"];
 
+const resourceLabels = {
+  wood: "木头",
+  bricks: "砖块",
+  textiles: "纺织品",
+  wheat: "稻米",
+  ore: "矿石",
+  livestock: "牲畜"
+};
+
 const effectOptions = [
   "釜底抽薪", "釜底抽薪+", "天道酬勤", "天道酬勤+",
   "梅林的魔法", "防御工事", "知己知彼",
