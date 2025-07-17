@@ -18,6 +18,9 @@ export const getOGInventory = async(req, res) => {
         const buffs = await getOGInventoryBuffService(client, id);
         const debuffs = await getOGInventoryDebuffService(client, id);
 
+        const sgNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Singapore' }));
+        const sgToday = sgNow.toISOString().split("T")[0];
+
         const processedBuffs = await Promise.all(buffs.map(async (buff) => {
             const targetName = await userGetNameByIDService(client, buff.target);
             return {
@@ -26,12 +29,11 @@ export const getOGInventory = async(req, res) => {
                 resource: buff.type,
                 expiry: buff.expiry 
                     ? (() => {
-                        const today = new Date().toISOString().split("T")[0];
                         const trimmedTime = buff.expiry.split(".")[0];
-                        const utcDateString = `${today}T${trimmedTime}Z`;
+                        const utcDateString = `${sgToday}T${trimmedTime}Z`;
                         const localTime = new Date(utcDateString);
                         return localTime.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit', hour12: true });
-                        })()
+                    })() 
                     : null
             };
         }));
@@ -42,15 +44,15 @@ export const getOGInventory = async(req, res) => {
                 resource: debuff.type,
                 expiry: debuff.expiry 
                     ? (() => {
-                        const today = new Date().toISOString().split("T")[0];
-                        const trimmedTime = debuff.expiry.split(".")[0]; // remove microseconds
-                        const utcDateString = `${today}T${trimmedTime}Z`; // treat as UTC
+                        const trimmedTime = debuff.expiry.split(".")[0];
+                        const utcDateString = `${sgToday}T${trimmedTime}Z`;
                         const localTime = new Date(utcDateString);
                         return localTime.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit', hour12: true });
-                        })()
+                    })()
                     : null
             };
         });
+
         await client.query("COMMIT");
 
         const inventory = {
