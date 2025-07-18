@@ -32,6 +32,7 @@ export const getOGInventory = async(req, res) => {
                         const trimmedTime = buff.expiry.split(".")[0];
                         const utcDateString = `${sgToday}T${trimmedTime}Z`;
                         const localTime = new Date(utcDateString);
+                        localTime.setUTCHours(localTime.getUTCHours() + 8);
                         return localTime.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit', hour12: true });
                     })() 
                     : null
@@ -47,6 +48,7 @@ export const getOGInventory = async(req, res) => {
                         const trimmedTime = debuff.expiry.split(".")[0];
                         const utcDateString = `${sgToday}T${trimmedTime}Z`;
                         const localTime = new Date(utcDateString);
+                        localTime.setUTCHours(localTime.getUTCHours() + 8);
                         return localTime.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit', hour12: true });
                     })()
                     : null
