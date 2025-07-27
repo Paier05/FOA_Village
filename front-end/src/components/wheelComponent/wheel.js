@@ -82,6 +82,7 @@ const OGSpinWheel = () => {
       <h2 className="wheel-header">OG 轮盘</h2>
       <Wheel
         mustStartSpinning={mustSpin}
+        spinDuration={2500}
         prizeNumber={prizeNumber}
         data={data}
         backgroundColors={["#fdf8e4", "#e9d6b0"]}
