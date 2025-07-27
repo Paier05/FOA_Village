@@ -155,9 +155,7 @@ const GoldExchange = () => {
           onClick={() => setShowConfirm(true)}
           className="og-trading-medieval-btn"
           disabled={
-            goldChanges === 0 ||
-            !selectedOG ||
-            Object.values(resourcesChanges).every((v) => v === 0)
+            !selectedOG
           }
         >
           <MdCached className="og-trading-medieval-btn-icon" /> 兑换
