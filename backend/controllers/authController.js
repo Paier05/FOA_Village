@@ -40,8 +40,8 @@ export const login = async(req, res) => {
         if (!isMatch) return handleResponse(res, 400, "密码错误！");
         if (user.valid === 0) return handleResponse(res, 400, "账号未被负责人启动！");
 
-        const token = jwt.sign({id: user.id, role: user.role}, process.env.JWT_SECRET, {expiresIn: "1h"});
-        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 60 * 60 * 1000 });
+        const token = jwt.sign({id: user.id, role: user.role}, process.env.JWT_SECRET, {expiresIn: "12h"});
+        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 60 * 60 * 1000 *12 });
 
         await client.query("COMMIT");
         handleResponse(res, 200, "账号登入成功！", { id: user.id, username: user.name, role: user.role });

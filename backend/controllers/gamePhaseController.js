@@ -5,9 +5,7 @@ import {
     updateGamePhaseService,
     updateGamePhaseTimeService
 } from "../models/gamePhaseTableService.js";
-import { 
-    clearInventoryTableService 
-} from "../models/inventoryTableService.js";
+import { clearOGResourcesService } from "../models/resourcesTableService.js";
 
 
 export const getGamePhase = async(req, res) => {
@@ -36,10 +34,10 @@ export const updateGamePhase = async(req, res) => {
         await client.query("BEGIN");
         const updatedGamephase = await updateGamePhaseService(client, phase);
 
-        // Clear the inventory table
-        if (phase.endsWith("Development Phase"))
+        // Clear the resources table
+        if (phase.endsWith("战争期"))
         {
-            await clearInventoryTableService(client);
+            await clearOGResourcesService(client);
         }
         await client.query("COMMIT");
         handleResponse(res, 200, "现游戏阶段已修改成功！", updatedGamephase);

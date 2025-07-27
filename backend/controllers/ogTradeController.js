@@ -1,5 +1,6 @@
 import pool from "../config/db.js";
 import handleResponse, { RES_TRANSLATION } from "../middlewares/responseHandler.js";
+import { getOGGoldForUpdateService, updateOGGoldService } from "../models/ogTableService.js";
 import { 
     getOGResourcesForUpdateService,
     updateOGResourcesService 
@@ -27,6 +28,10 @@ export const handleTrade = async (req, res) =>
 
         const senderResources = await getOGResourcesForUpdateService(client, fromOgId);
         const receiverResources = await getOGResourcesForUpdateService(client, toOg);
+        
+        const senderGold = await getOGGoldForUpdateService(client, fromOgId);
+        const receiverGold = await getOGGoldForUpdateService(client, toOg);
+        await updateOGGoldService(client, toOg, );
 
         if (!senderResources || !receiverResources) 
         {
@@ -36,9 +41,19 @@ export const handleTrade = async (req, res) =>
         // Validate trade
         for (const [resourceType, amount] of Object.entries(resources)) 
         {
-            if (amount < 0 || senderResources[resourceType] < amount) 
+            if (resourceType === "gold")
             {
-                throw new Error(` ${RES_TRANSLATION[resourceType]} 资源不足！`);
+                if (amount < 0 || senderGold < amount)
+                {
+                    throw new Error(`金币不足！`);
+                }
+            }
+            else
+            {
+                if (amount < 0 || senderResources[resourceType] < amount) 
+                {
+                    throw new Error(` ${RES_TRANSLATION[resourceType]} 资源不足！`);
+                }
             }
         }
 
@@ -46,7 +61,14 @@ export const handleTrade = async (req, res) =>
         const newSender = { ...senderResources };
         for (const [resourceType, amount] of Object.entries(resources)) 
         {
-            newSender[resourceType] -= amount;
+            if (resourceType === "gold")
+            {
+                await updateOGGoldService(client, fromOgId, -1 * amount);
+            }
+            else
+            {
+                newSender[resourceType] -= amount;
+            }
         }
 
         await updateOGResourcesService(
@@ -58,13 +80,20 @@ export const handleTrade = async (req, res) =>
             newSender.wheat,
             newSender.ore,
             newSender.textiles
-            );
+        );
 
         // Add to receiver
         const newReceiver = { ...receiverResources };
         for (const [resourceType, amount] of Object.entries(resources)) 
         {
-            newReceiver[resourceType] += amount;
+            if (resourceType === "gold")
+            {
+                await updateOGGoldService(client, toOg, amount);
+            }
+            else
+            {
+                newReceiver[resourceType] += amount;
+            }
         }
 
         await updateOGResourcesService(
