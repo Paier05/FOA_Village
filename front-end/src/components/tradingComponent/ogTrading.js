@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance.js';
 import { GiTrade, GiWoodPile, GiBrickWall, GiSheep, GiWheat, GiAnvil, GiSpinningWheel } from 'react-icons/gi';
 import "./ogTrading.css";
-import { FaBroom, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaBroom, FaCheckCircle, FaCoins, FaTimesCircle } from "react-icons/fa";
 
 const resourceIcons = {
-  wood: <GiWoodPile />, bricks: <GiBrickWall />, livestock: <GiSheep />, wheat: <GiWheat />, ore: <GiAnvil />, textiles: <GiSpinningWheel />
+  wood: <GiWoodPile />, 
+  bricks: <GiBrickWall />, 
+  livestock: <GiSheep />, 
+  wheat: <GiWheat />, 
+  ore: <GiAnvil />, 
+  textiles: <GiSpinningWheel />,
+  gold: <FaCoins />
 };
 
 const resourceLabels = {
@@ -16,6 +22,7 @@ const resourceLabels = {
   wheat: "稻米",
   ore: "矿石",
   livestock: "牲畜",
+  gold: "金币"
 };
 
 const resourceTypes = Object.keys(resourceIcons);
