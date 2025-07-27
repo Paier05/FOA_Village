@@ -42,14 +42,14 @@ export const createOGTable = async() => {
     id INT PRIMARY KEY,
     score INT NOT NULL DEFAULT 0,
     army INT NOT NULL DEFAULT 0,
-    fdcx INT NOT NULL DEFAULT 2,
-    fdcx_plus INT NOT NULL DEFAULT 2,
-    mlmf INT NOT NULL DEFAULT 2,
+    fdcx INT NOT NULL DEFAULT 100,
+    fdcx_plus INT NOT NULL DEFAULT 100,
+    mlmf INT NOT NULL DEFAULT 100,
     smmf INT NOT NULL DEFAULT 100,
     fygs INT NOT NULL DEFAULT 1,
     szj INT NOT NULL DEFAULT 1,
     pzyy INT NOT NULL DEFAULT 1,
-    gold INT NOT NULL DEFAULT 0,
+    gold INT NOT NULL DEFAULT 5,
     FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE);
     `;
     try 
@@ -65,12 +65,12 @@ export const createResourcesTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS resources (
     id INT PRIMARY KEY,
-    wood INT DEFAULT 0,
-    bricks INT DEFAULT 0,
-    livestock INT DEFAULT 0,
-    wheat INT DEFAULT 0,
-    ore INT DEFAULT 0,
-    textiles INT DEFAULT 0,
+    wood INT DEFAULT 10,
+    bricks INT DEFAULT 10,
+    livestock INT DEFAULT 10,
+    wheat INT DEFAULT 10,
+    ore INT DEFAULT 10,
+    textiles INT DEFAULT 10,
     FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE);
     `;
     try
@@ -182,7 +182,7 @@ export const createWheelTable = async() => {
     const queryText = `
     CREATE TABLE IF NOT EXISTS wheel (
     id INT PRIMARY KEY,
-    blank INT DEFAULT 8,
+    blank INT DEFAULT 6,
     wood INT DEFAULT 0,
     bricks INT DEFAULT 0,
     livestock INT DEFAULT 0,

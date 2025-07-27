@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS wheel (
     id INT PRIMARY KEY,
-    blank INT DEFAULT 8,
+    blank INT DEFAULT 6,
     wood INT DEFAULT 0,
     bricks INT DEFAULT 0,
     livestock INT DEFAULT 0,
