@@ -15,6 +15,17 @@ const noExpiryEffects = [
     "防御工事", "石中剑", "知己知彼", "兵不厌诈", "抛砖引玉", "十面埋伏"
 ];
 
+const resourceLabels = {
+    wheat: "稻米",
+    ore: "矿石",
+    textiles: "纺织品",
+    bricks: "砖块",
+    wood: "木头",
+    livestock: "牲畜",
+    army: "军队",
+    gold: "金币"
+};
+
 const NPCViewInventory = () => {
     const { selectedOG } = useOG();
     const [inventory, setInventory] = useState(null);
@@ -103,7 +114,7 @@ const NPCViewInventory = () => {
                                             {entry.effect}
                                         </td>
                                         <td>{showTargetName ? entry.targetName || "-" : "-"}</td>
-                                        <td>{showTargetResource ? entry.resource : "-"}</td>
+                                        <td>{showTargetResource ? resourceLabels[entry.resource] : "-"}</td>
                                         <td>{showExpiry ? entry.expiry : "-"}</td>
                                     </tr>
                                 );
@@ -138,7 +149,7 @@ const NPCViewInventory = () => {
                                     >
                                         {entry.effect}
                                     </td>
-                                    <td>{entry.resource}</td>
+                                    <td>{resourceLabels[entry.resource]}</td>
                                     <td>{entry.expiry}</td>
                                 </tr>
                             ))

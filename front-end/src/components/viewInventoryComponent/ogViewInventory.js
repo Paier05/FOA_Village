@@ -8,6 +8,17 @@ const noTargetNameEffects = [ "防御工事", "知己知彼", "天道酬勤", "�
 const noTargetEffects = [ "防御工事", "知己知彼", "天道酬勤", "天道酬勤+", "兵不厌诈", "抛砖引玉", "十面埋伏", "梅林的魔法" ];
 const noExpiryEffects = [ "防御工事", "石中剑", "知己知彼", "兵不厌诈", "抛砖引玉", "十面埋伏" ];
 
+const resourceLabels = {
+    wheat: "稻米",
+    ore: "矿石",
+    textiles: "纺织品",
+    bricks: "砖块",
+    wood: "木头",
+    livestock: "牲畜",
+    army: "军队",
+    gold: "金币"
+};
+
 const OGOwnInventory = () => {
     const [inventory, setInventory] = useState(null);
     const prevInventory = useRef({ buffs: [], debuffs: [] });
@@ -87,7 +98,7 @@ const OGOwnInventory = () => {
                                     <tr key={`buff-${i}`} id={`buff-row-${i}`}>
                                         <td className="clickable-effect" onClick={() => handleEffectClick(entry.effect)}>{entry.effect}</td>
                                         <td>{showTargetName ? entry.targetName || "-" : "-"}</td>
-                                        <td>{showTargetResource ? entry.resource : "-"}</td>
+                                        <td>{showTargetResource ? resourceLabels[entry.resource] : "-"}</td>
                                         <td>{showExpiry ? entry.expiry : "-"}</td>
                                     </tr>
                                 );
@@ -116,7 +127,7 @@ const OGOwnInventory = () => {
                             inventory.debuffs.map((entry, i) => (
                                 <tr key={`debuff-${i}`} id={`debuff-row-${i}`}>
                                     <td className="clickable-effect" onClick={() => handleEffectClick(entry.effect)}>{entry.effect}</td>
-                                    <td>{entry.resource}</td>
+                                    <td>{resourceLabels[entry.resource]}</td>
                                     <td>{entry.expiry}</td>
                                 </tr>
                             ))
