@@ -44,11 +44,9 @@ export const updateOGSpecificResourceService = async(client, id, resource, chang
     return result.rows[0];
 };
 
-/*
-export const getAllOGResourcesService = async(client) => {
+export const clearOGResourcesService = async(client) => {
     const result = await client.query(
-        "SELECT * FROM resources",
+        "UPDATE resources SET wood = 0, bricks = 0, livestock = 0, wheat = 0, ore = 0, textiles = 0 RETURNING *"
     );
     return result.rows;
 };
-*/
