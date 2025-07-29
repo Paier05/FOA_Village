@@ -31,7 +31,6 @@ export const handleTrade = async (req, res) =>
         
         const senderGold = await getOGGoldForUpdateService(client, fromOgId);
         const receiverGold = await getOGGoldForUpdateService(client, toOg);
-        await updateOGGoldService(client, toOg, );
 
         if (!senderResources || !receiverResources) 
         {
